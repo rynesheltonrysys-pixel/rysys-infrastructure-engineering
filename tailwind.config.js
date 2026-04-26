@@ -36,7 +36,8 @@ export default {
   				cream: '#fdfaf5',
   				grey: '#ececec',
   				blue: '#1e40af',
-  				black: '#121212'
+  				black: '#121212',
+          gold: '#D4AF37'
   			},
   			muted: {
   				DEFAULT: 'hsl(var(--muted))',
@@ -74,7 +75,10 @@ export default {
   			brutal: '4px 4px 0px #121212',
   			'brutal-lg': '10px 10px 0px #121212',
   			'brutal-blue': '6px 6px 0px #1e40af',
-  			'brutal-hover': '2px 2px 0px #121212'
+        'brutal-gold': '4px 4px 0px #D4AF37',
+        'brutal-gold-lg': '10px 10px 0px #D4AF37',
+  			'brutal-hover': '2px 2px 0px #121212',
+        'brutal-gold-hover': '2px 2px 0px #D4AF37'
   		},
   		keyframes: {
   			'accordion-down': {

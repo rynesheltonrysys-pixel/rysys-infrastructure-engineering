@@ -4,10 +4,8 @@ import {
   Cpu,
   Globe,
   CheckCircle2,
-  ShieldCheck,
   Terminal,
-  Code2,
-  HardHat
+  Code2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -20,12 +18,12 @@ const NAVBAR_LINKS = [
 const TRUST_AFFILIATIONS = ['IEEE', 'ANSI', 'OSHA', 'NEMA'];
 export function HomePage() {
   return (
-    <div className="min-h-screen bg-rysys-cream text-rysys-black selection:bg-rysys-blue selection:text-white font-sans scroll-smooth">
+    <div className="min-h-screen bg-rysys-cream text-rysys-black selection:bg-rysys-gold selection:text-white font-sans scroll-smooth">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-white border-b-4 border-rysys-black px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-rysys-blue border-3 border-rysys-black flex items-center justify-center shadow-brutal">
+          <div className="flex items-center gap-2 group cursor-pointer">
+            <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex items-center justify-center shadow-brutal-gold group-hover:translate-x-[1px] group-hover:translate-y-[1px] group-hover:shadow-brutal-gold-hover transition-all">
               <span className="text-white font-black text-xl">R</span>
             </div>
             <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
@@ -34,7 +32,7 @@ export function HomePage() {
             {NAVBAR_LINKS.map((link) => (
               link.isCta ? (
                 <a key={link.name} href={link.href}>
-                  <Button className="bg-rysys-blue text-white border-3 border-rysys-black shadow-brutal hover:shadow-brutal-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-bold uppercase py-6 px-8 h-auto">
+                  <Button className="bg-rysys-blue text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-bold uppercase py-6 px-8 h-auto">
                     {link.name}
                   </Button>
                 </a>
@@ -42,7 +40,7 @@ export function HomePage() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-sm font-bold uppercase tracking-widest hover:text-rysys-blue transition-colors"
+                  className="text-sm font-bold uppercase tracking-widest hover:text-rysys-gold transition-colors"
                 >
                   {link.name}
                 </a>
@@ -55,15 +53,15 @@ export function HomePage() {
       <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 space-y-8">
-            <Badge className="bg-rysys-grey text-rysys-black border-2 border-rysys-black rounded-none px-4 py-1 font-mono uppercase font-bold text-sm shadow-brutal">
-              Established 2025 // v1.0.4
+            <Badge className="bg-white text-rysys-black border-2 border-rysys-gold rounded-none px-4 py-1 font-mono uppercase font-bold text-sm shadow-brutal-gold">
+              Established 2025 // <span className="text-rysys-gold">v1.0.4</span>
             </Badge>
             <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tighter uppercase">
               Physical <br />
               <span className="text-rysys-blue">Intelligence</span> <br />
               at Scale.
             </h1>
-            <p className="text-xl md:text-2xl font-medium leading-relaxed max-w-2xl text-muted-foreground border-l-4 border-rysys-black pl-6">
+            <p className="text-xl md:text-2xl font-medium leading-relaxed max-w-2xl text-muted-foreground border-l-4 border-rysys-gold pl-6">
               RYSYS bridges the gap between massive-scale electrical infrastructure and next-generation AI automation.
               Engineering the foundation for the silicon century.
             </p>
@@ -77,24 +75,24 @@ export function HomePage() {
                   <span className="font-mono text-xs font-bold uppercase tracking-tighter">System Health: Nominal</span>
                 </div>
                 <div className="space-y-1 font-mono text-sm">
-                  <p className="text-rysys-blue font-bold">GRID_LINK: ACTIVE</p>
+                  <p className="text-rysys-gold font-bold">GRID_LINK: ACTIVE</p>
                   <p>PWR_LOAD: 4.8 GW</p>
                   <p>AI_SYNC: 99.99%</p>
                 </div>
               </div>
             </div>
-            <div className="absolute -bottom-6 -left-6 bg-yellow-400 border-4 border-rysys-black px-6 py-4 shadow-brutal z-20">
+            <div className="absolute -bottom-6 -left-6 bg-yellow-400 border-4 border-rysys-gold px-6 py-4 shadow-brutal-gold z-20">
               <span className="font-black italic text-xl uppercase">Safety First.</span>
             </div>
           </div>
         </div>
       </header>
-      {/* Trust Bar (Text Only) */}
+      {/* Trust Bar */}
       <section className="bg-rysys-black py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-center md:justify-between items-center gap-12">
             {TRUST_AFFILIATIONS.map((name) => (
-              <span key={name} className="text-white text-3xl md:text-5xl font-black tracking-[0.2em] uppercase opacity-80">
+              <span key={name} className="text-white text-3xl md:text-5xl font-black tracking-[0.2em] uppercase opacity-80 hover:text-rysys-gold hover:opacity-100 transition-all cursor-default">
                 {name}
               </span>
             ))}
@@ -105,7 +103,7 @@ export function HomePage() {
       <section id="capabilities" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="mb-16">
           <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">
-            Proven <span className="text-rysys-blue">Capabilities</span>
+            Proven <span className="text-rysys-gold">Capabilities</span>
           </h2>
           <div className="h-2 w-32 bg-rysys-black" />
         </div>
@@ -133,18 +131,18 @@ export function HomePage() {
       {/* Leadership Profile */}
       <section id="leadership" className="bg-rysys-grey py-20 border-y-4 border-rysys-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white border-4 border-rysys-black shadow-brutal-lg p-8 md:p-12 overflow-hidden relative">
+          <div className="bg-white border-4 border-rysys-black shadow-brutal-gold-lg p-8 md:p-12 overflow-hidden relative">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-4">
                 <div className="aspect-[4/5] bg-rysys-blue border-4 border-rysys-black shadow-brutal relative overflow-hidden">
                   <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center grayscale contrast-125" />
-                  <div className="absolute inset-0 bg-rysys-blue/20 mix-blend-multiply" />
+                  <div className="absolute inset-0 bg-rysys-gold/20 mix-blend-multiply" />
                 </div>
               </div>
               <div className="lg:col-span-8 space-y-6">
                 <div className="space-y-2">
                   <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">Director of Engineering</h3>
-                  <p className="text-xl font-bold text-rysys-blue uppercase tracking-widest font-mono">GPA 4.0 / Senior EE Lead</p>
+                  <p className="text-xl font-bold text-rysys-gold uppercase tracking-widest font-mono">GPA 4.0 / Senior EE Lead</p>
                 </div>
                 <p className="text-lg leading-relaxed font-medium">
                   With a background spanning core electrical engineering and advanced machine learning, our leadership ensures that RYSYS solutions aren't just theoretically sound—they're industrially hardened. We believe infrastructure should be as smart as the silicon it powers.
@@ -157,7 +155,7 @@ export function HomePage() {
                     "Lead Developer: GridOS Core"
                   ].map((item) => (
                     <div key={item} className="flex items-center gap-2">
-                      <CheckCircle2 className="text-rysys-blue w-5 h-5 flex-shrink-0" />
+                      <CheckCircle2 className="text-rysys-gold w-5 h-5 flex-shrink-0" />
                       <span className="font-bold text-sm uppercase">{item}</span>
                     </div>
                   ))}
@@ -169,7 +167,7 @@ export function HomePage() {
       </section>
       {/* Community Portal CTA */}
       <section id="portal" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="bg-rysys-blue border-4 border-rysys-black p-10 md:p-16 text-center shadow-brutal-lg relative overflow-hidden">
+        <div className="bg-rysys-blue border-4 border-rysys-black p-10 md:p-16 text-center shadow-brutal-gold-lg relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rotate-45 translate-x-16 -translate-y-16" />
           <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mb-6">
             Join the RYSYS <br /> Community
@@ -178,8 +176,8 @@ export function HomePage() {
             Access our open-source infrastructure tools, engineering standards, and technical whitepapers.
           </p>
           <div className="flex justify-center">
-            <Button className="bg-white text-rysys-black border-3 border-rysys-black shadow-brutal hover:shadow-brutal-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-black uppercase py-8 px-12 text-xl h-auto">
-              Review Open Proposals <Terminal className="ml-2" />
+            <Button className="bg-white text-rysys-black border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:text-rysys-gold hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-black uppercase py-8 px-12 text-xl h-auto group">
+              Review Open Proposals <Terminal className="ml-2 group-hover:text-rysys-gold transition-colors" />
             </Button>
           </div>
         </div>
@@ -190,31 +188,31 @@ export function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-2 space-y-6">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-rysys-black border-2 border-rysys-black flex items-center justify-center shadow-brutal">
+                <div className="w-8 h-8 bg-rysys-gold border-2 border-rysys-black flex items-center justify-center shadow-brutal-gold">
                   <span className="text-white font-black">R</span>
                 </div>
                 <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
               </div>
-              <p className="text-lg font-bold text-muted-foreground max-w-sm">
+              <p className="text-lg font-bold text-muted-foreground max-sm">
                 Engineering the physical foundations of tomorrow's digital world. Strength, precision, and intelligence at scale.
               </p>
             </div>
             <div>
-              <h4 className="font-black uppercase tracking-widest mb-6 border-b-2 border-rysys-black pb-2 inline-block">Sitemap</h4>
+              <h4 className="font-black uppercase tracking-widest mb-6 border-b-2 border-rysys-gold pb-2 inline-block">Sitemap</h4>
               <div className="space-y-4 font-bold uppercase text-sm flex flex-col text-muted-foreground">
-                <span>Project Portfolio</span>
-                <span>Technical Papers</span>
-                <span>Safety Records</span>
-                <span>Career Portal</span>
+                <span className="hover:text-rysys-gold cursor-pointer transition-colors">Project Portfolio</span>
+                <span className="hover:text-rysys-gold cursor-pointer transition-colors">Technical Papers</span>
+                <span className="hover:text-rysys-gold cursor-pointer transition-colors">Safety Records</span>
+                <span className="hover:text-rysys-gold cursor-pointer transition-colors">Career Portal</span>
               </div>
             </div>
             <div>
-              <h4 className="font-black uppercase tracking-widest mb-6 border-b-2 border-rysys-black pb-2 inline-block">Contact</h4>
+              <h4 className="font-black uppercase tracking-widest mb-6 border-b-2 border-rysys-gold pb-2 inline-block">Contact</h4>
               <div className="space-y-4 font-bold uppercase text-sm flex flex-col text-muted-foreground">
                 <span>HQ - Texas, USA</span>
-                <span>systems@rysys.dev</span>
-                <span>LinkedIn</span>
-                <span>Twitter (X)</span>
+                <span className="hover:text-rysys-gold cursor-pointer transition-colors">systems@rysys.dev</span>
+                <span className="hover:text-rysys-gold cursor-pointer transition-colors">LinkedIn</span>
+                <span className="hover:text-rysys-gold cursor-pointer transition-colors">Twitter (X)</span>
               </div>
             </div>
           </div>
@@ -223,8 +221,8 @@ export function HomePage() {
               © 2025 RYSYS Infrastructure & Engineering. All rights reserved.
             </span>
             <div className="flex gap-6 font-mono text-xs font-bold uppercase text-muted-foreground">
-              <span>Privacy Policy</span>
-              <span>Terms of Service</span>
+              <span className="hover:text-rysys-gold cursor-pointer">Privacy Policy</span>
+              <span className="hover:text-rysys-gold cursor-pointer">Terms of Service</span>
             </div>
           </div>
         </div>
@@ -239,17 +237,17 @@ function CapabilityCard({ icon, title, description, tags }: {
   tags: string[];
 }) {
   return (
-    <Card className="bg-white border-4 border-rysys-black rounded-none p-8 shadow-brutal hover:shadow-brutal-lg transition-all duration-300 group">
-      <div className="w-16 h-16 bg-rysys-grey border-3 border-rysys-black flex items-center justify-center mb-6 group-hover:bg-rysys-blue group-hover:text-white transition-colors">
+    <Card className="bg-white border-4 border-rysys-black rounded-none p-8 shadow-brutal hover:shadow-brutal-gold hover:border-rysys-gold transition-all duration-300 group">
+      <div className="w-16 h-16 bg-rysys-grey border-3 border-rysys-black flex items-center justify-center mb-6 group-hover:bg-rysys-gold group-hover:text-white transition-colors">
         {icon}
       </div>
-      <h3 className="text-2xl font-black uppercase tracking-tighter mb-4">{title}</h3>
+      <h3 className="text-2xl font-black uppercase tracking-tighter mb-4 group-hover:text-rysys-gold transition-colors">{title}</h3>
       <p className="font-medium text-muted-foreground mb-6 leading-relaxed">
         {description}
       </p>
       <div className="flex flex-wrap gap-2">
         {tags.map((tag) => (
-          <span key={tag} className="bg-rysys-grey border-2 border-rysys-black px-2 py-1 text-[10px] font-mono font-black uppercase">
+          <span key={tag} className="bg-rysys-grey border-2 border-rysys-black px-2 py-1 text-[10px] font-mono font-black uppercase group-hover:border-rysys-gold transition-colors">
             {tag}
           </span>
         ))}
