@@ -193,7 +193,7 @@ export function HomePage() {
                 </div>
                 <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
               </div>
-              <p className="text-lg font-bold text-muted-foreground max-sm">
+              <p className="text-lg font-bold text-muted-foreground">
                 Engineering the physical foundations of tomorrow's digital world. Strength, precision, and intelligence at scale.
               </p>
             </div>
