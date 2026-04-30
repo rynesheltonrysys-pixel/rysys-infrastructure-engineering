@@ -1,15 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-  FileText, Plus, LogOut, Send, History, MessageSquare, Loader2, Search, User as UserIcon, RefreshCw, Users, Save
+  FileText, Plus, LogOut, Send, History, MessageSquare, Loader2, Search, User as UserIcon, RefreshCw, Users, Save, Settings, ShieldCheck
 } from 'lucide-react';
-import { isAuthed, authHeader, clearAuth, getUser } from '@/lib/auth';
+import { isAuthed, authHeader, clearAuth, getUser, setUser as saveUser } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -23,9 +26,10 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { PageTransition } from '@/components/PageTransition';
 import { toast } from 'sonner';
-import type { Doc, Message, Comment, UserPublic } from '@shared/types';
+import type { Doc, Message, Comment, UserPublic, User } from '@shared/types';
 export function ForustPage() {
   const navigate = useNavigate();
   const [docs, setDocs] = useState<Doc[]>([]);
@@ -113,11 +117,14 @@ export function ForustPage() {
         </Link>
         <div className="flex items-center gap-4">
           <Badge className="hidden sm:inline-flex bg-rysys-green-power text-white border-2 border-rysys-black rounded-none px-3 font-mono text-[10px]">
-            OPERATOR: {user?.email}
+            OPERATOR: {user?.profile?.name || user?.email}
           </Badge>
-          <Button variant="ghost" size="icon" onClick={handleLogout} className="border-2 border-rysys-black rounded-none hover:bg-rysys-grey h-10 w-10">
-            <LogOut className="w-4 h-4" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <OperatorSettings />
+            <Button variant="ghost" size="icon" onClick={handleLogout} className="border-2 border-rysys-black rounded-none hover:bg-rysys-grey h-10 w-10">
+              <LogOut className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
       </header>
       <PageTransition className="flex-1 flex flex-col">
@@ -232,6 +239,189 @@ export function ForustPage() {
     </div>
   );
 }
+const profileSchema = z.object({
+  name: z.string().min(2, "Name required"),
+  state: z.string().min(2, "State required"),
+  city: z.string().min(2, "City required"),
+  neighborhood: z.string().optional(),
+  reason: z.string().min(10, "Minimum 10 characters required"),
+});
+const passwordSchema = z.object({
+  current: z.string().min(1, "Required"),
+  next: z.string().min(8, "Min 8 characters"),
+  confirm: z.string(),
+}).refine(data => data.next === data.confirm, {
+  message: "Passwords must match",
+  path: ["confirm"],
+});
+function OperatorSettings() {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const user = getUser();
+  const profileForm = useForm<z.infer<typeof profileSchema>>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      name: user?.profile?.name || '',
+      state: user?.profile?.state || 'OR',
+      city: user?.profile?.city || 'Portland',
+      neighborhood: user?.profile?.neighborhood || '',
+      reason: user?.profile?.reason || '',
+    }
+  });
+  const passwordForm = useForm<z.infer<typeof passwordSchema>>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: { current: '', next: '', confirm: '' }
+  });
+  const onProfileSubmit = async (values: z.infer<typeof profileSchema>) => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/forust/profile', {
+        method: 'PUT',
+        headers: authHeader(),
+        body: JSON.stringify(values),
+      });
+      const json = await res.json();
+      if (json.success) {
+        saveUser(json.data);
+        toast.success('Operator Profile Synchronized');
+      } else {
+        toast.error(json.error || 'Update failed');
+      }
+    } catch {
+      toast.error('Network failure');
+    } finally {
+      setLoading(false);
+    }
+  };
+  const onPasswordSubmit = async (values: z.infer<typeof passwordSchema>) => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/forust/change-password', {
+        method: 'POST',
+        headers: authHeader(),
+        body: JSON.stringify({ current: values.current, next: values.next }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        toast.success('Security Keys Rotated Successfully');
+        passwordForm.reset();
+      } else {
+        toast.error(json.error || 'Password update failed');
+      }
+    } catch {
+      toast.error('Security protocol failure');
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="ghost" size="icon" className="border-2 border-rysys-black rounded-none hover:bg-rysys-grey h-10 w-10 shadow-brutal-hover hover:shadow-brutal-gold transition-all">
+          <Settings className="w-4 h-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl rounded-none border-4 border-rysys-black bg-white p-0 shadow-brutal-lg outline-none overflow-hidden">
+        <DialogHeader className="p-6 border-b-4 border-rysys-black bg-rysys-cream">
+          <DialogTitle className="text-3xl font-black uppercase tracking-tighter flex items-center gap-3">
+            <Settings className="w-8 h-8 text-rysys-gold" />
+            Operator Settings
+          </DialogTitle>
+        </DialogHeader>
+        <ScrollArea className="max-h-[70vh]">
+          <div className="p-8 space-y-12">
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 border-b-2 border-rysys-black pb-2">
+                <UserIcon className="w-5 h-5 text-rysys-blue-power" />
+                <h3 className="font-black uppercase text-sm tracking-widest">Public Profile Specification</h3>
+              </div>
+              <Form {...profileForm}>
+                <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField control={profileForm.control} name="name" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[10px] font-black uppercase">Operator Name</FormLabel>
+                        <FormControl><Input {...field} className="border-2 border-rysys-black rounded-none bg-rysys-cream font-bold" /></FormControl>
+                        <FormMessage className="text-[9px] font-black uppercase text-red-600" />
+                      </FormItem>
+                    )} />
+                    <FormField control={profileForm.control} name="neighborhood" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[10px] font-black uppercase">Neighborhood</FormLabel>
+                        <FormControl><Input {...field} className="border-2 border-rysys-black rounded-none bg-rysys-cream font-bold" /></FormControl>
+                      </FormItem>
+                    )} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField control={profileForm.control} name="city" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[10px] font-black uppercase">City</FormLabel>
+                        <FormControl><Input {...field} className="border-2 border-rysys-black rounded-none bg-rysys-cream font-bold" /></FormControl>
+                      </FormItem>
+                    )} />
+                    <FormField control={profileForm.control} name="state" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[10px] font-black uppercase">State</FormLabel>
+                        <FormControl><Input {...field} className="border-2 border-rysys-black rounded-none bg-rysys-cream font-bold" /></FormControl>
+                      </FormItem>
+                    )} />
+                  </div>
+                  <FormField control={profileForm.control} name="reason" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[10px] font-black uppercase">Service Objective</FormLabel>
+                      <FormControl><Textarea {...field} className="border-2 border-rysys-black rounded-none bg-rysys-cream font-bold min-h-[100px]" /></FormControl>
+                      <FormMessage className="text-[9px] font-black uppercase text-red-600" />
+                    </FormItem>
+                  )} />
+                  <Button type="submit" disabled={loading} className="w-full bg-rysys-black text-white rounded-none font-black uppercase shadow-brutal hover:shadow-brutal-gold h-12">
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+                    Synchronize Profile
+                  </Button>
+                </form>
+              </Form>
+            </section>
+            <section className="space-y-6">
+              <div className="flex items-center gap-3 border-b-2 border-rysys-black pb-2">
+                <ShieldCheck className="w-5 h-5 text-rysys-gold" />
+                <h3 className="font-black uppercase text-sm tracking-widest">Security Protocol Overhaul</h3>
+              </div>
+              <Form {...passwordForm}>
+                <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-6">
+                  <FormField control={passwordForm.control} name="current" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[10px] font-black uppercase">Current Key</FormLabel>
+                      <FormControl><Input type="password" {...field} className="border-2 border-rysys-black rounded-none bg-rysys-cream font-bold" /></FormControl>
+                      <FormMessage className="text-[9px] font-black uppercase text-red-600" />
+                    </FormItem>
+                  )} />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField control={passwordForm.control} name="next" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[10px] font-black uppercase">Next Key</FormLabel>
+                        <FormControl><Input type="password" {...field} className="border-2 border-rysys-black rounded-none bg-rysys-cream font-bold" /></FormControl>
+                        <FormMessage className="text-[9px] font-black uppercase text-red-600" />
+                      </FormItem>
+                    )} />
+                    <FormField control={passwordForm.control} name="confirm" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[10px] font-black uppercase">Confirm Next Key</FormLabel>
+                        <FormControl><Input type="password" {...field} className="border-2 border-rysys-black rounded-none bg-rysys-cream font-bold" /></FormControl>
+                        <FormMessage className="text-[9px] font-black uppercase text-red-600" />
+                      </FormItem>
+                    )} />
+                  </div>
+                  <Button type="submit" disabled={loading} className="w-full bg-white text-rysys-black border-4 border-rysys-black rounded-none font-black uppercase shadow-brutal hover:shadow-brutal-gold h-12">
+                    Rotate Credentials
+                  </Button>
+                </form>
+              </Form>
+            </section>
+          </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
+  );
+}
 function DocCard({ initialDoc }: { initialDoc: Doc }) {
   const [open, setOpen] = useState(false);
   return (
@@ -324,27 +514,6 @@ function DocViewer({ doc: initialDoc }: { doc: Doc }) {
       toast.error('System failure');
     } finally {
       setIsCommitting(false);
-    }
-  };
-  const handleUpdateSharing = async () => {
-    setIsSavingSharing(true);
-    const shareWith = shareInput.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-    try {
-      const res = await fetch(`/api/forust/docs/${doc.id}/sharing`, {
-        method: 'PUT',
-        headers: authHeader(),
-        body: JSON.stringify({ shareWith })
-      });
-      const json = await res.json();
-      if (json.success) {
-        setDoc(json.data);
-        setShareInput(json.data.sharedWith.join(', '));
-        toast.success('Protocols updated');
-      }
-    } catch {
-      toast.error('Network failure');
-    } finally {
-      setIsSavingSharing(false);
     }
   };
   const currentVersion = doc.versions.find(v => v.version === activeVer) || doc.versions[doc.versions.length - 1];

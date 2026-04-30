@@ -26,24 +26,24 @@ export class GlobalDurableObject extends DurableObject {
             neighborhood: profile?.neighborhood || "",
             reason: profile?.reason || ""
         };
-        const newUser = { 
-            id, 
-            email, 
-            pass, 
+        const newUser = {
+            id,
+            email,
+            pass,
             createdAt: new Date().toISOString(),
             profile: normalizedProfile
         };
         users[id] = newUser;
         await this.ctx.storage.put(this.USERS_KEY, users);
         const token = await this.issueToken(id, email);
-        return { 
-            token, 
-            user: { 
-                id, 
-                email, 
+        return {
+            token,
+            user: {
+                id,
+                email,
                 createdAt: newUser.createdAt,
                 profile: normalizedProfile
-            } as User 
+            } as User
         };
     }
     async loginUser(email: string, pass: string) {
@@ -51,15 +51,53 @@ export class GlobalDurableObject extends DurableObject {
         const user = Object.values(users).find(u => u.email === email && u.pass === pass);
         if (!user) return null;
         const token = await this.issueToken(user.id, email);
-        return { 
-            token, 
-            user: { 
-                id: user.id, 
-                email: user.email, 
+        return {
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
                 createdAt: user.createdAt,
                 profile: user.profile
             } as User
         };
+    }
+    async getUser(uid: string): Promise<User | null> {
+        const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
+        const u = users[uid];
+        if (!u) return null;
+        return {
+            id: u.id,
+            email: u.email,
+            createdAt: u.createdAt,
+            profile: u.profile
+        } as User;
+    }
+    async updateUserProfile(uid: string, profile: Partial<UserProfile>): Promise<User | null> {
+        const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
+        const user = users[uid];
+        if (!user) return null;
+        user.profile = {
+            ...user.profile,
+            ...profile,
+            city: profile.city || user.profile?.city || "Portland"
+        };
+        users[uid] = user;
+        await this.ctx.storage.put(this.USERS_KEY, users);
+        return {
+            id: user.id,
+            email: user.email,
+            createdAt: user.createdAt,
+            profile: user.profile
+        } as User;
+    }
+    async changePassword(uid: string, currentPass: string, newPass: string): Promise<boolean> {
+        const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
+        const user = users[uid];
+        if (!user || user.pass !== currentPass) return false;
+        user.pass = newPass;
+        users[uid] = user;
+        await this.ctx.storage.put(this.USERS_KEY, users);
+        return true;
     }
     async issueToken(uid: string, email: string): Promise<string> {
         const payload: AuthTokenPayload = {

@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { Env } from './core-utils';
-import type { DemoItem, ApiResponse, AuthTokenPayload, UserPublic, Message, Doc } from '@shared/types';
+import type { DemoItem, ApiResponse, AuthTokenPayload, UserPublic, Message, Doc, User } from '@shared/types';
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
     const protectedMiddleware = async (c: any, next: any) => {
         const authHeader = c.req.header('Authorization');
@@ -32,6 +32,30 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
         const result = await stub.loginUser(email, password);
         if (!result) return c.json({ success: false, error: 'Invalid credentials' }, 401);
         return c.json({ success: true, data: result });
+    });
+    app.get('/api/forust/profile', protectedMiddleware, async (c) => {
+        const userPayload = (c as any).get('user') as AuthTokenPayload;
+        const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
+        const user = await stub.getUser(userPayload.uid);
+        if (!user) return c.json({ success: false, error: 'Not Found' }, 404);
+        return c.json({ success: true, data: user } satisfies ApiResponse<User>);
+    });
+    app.put('/api/forust/profile', protectedMiddleware, async (c) => {
+        const userPayload = (c as any).get('user') as AuthTokenPayload;
+        const body = await c.req.json();
+        const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
+        const updated = await stub.updateUserProfile(userPayload.uid, body);
+        if (!updated) return c.json({ success: false, error: 'Update failed' }, 400);
+        return c.json({ success: true, data: updated } satisfies ApiResponse<User>);
+    });
+    app.post('/api/forust/change-password', protectedMiddleware, async (c) => {
+        const userPayload = (c as any).get('user') as AuthTokenPayload;
+        const { current, next } = await c.req.json();
+        if (!current || !next) return c.json({ success: false, error: 'Missing data' }, 400);
+        const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
+        const success = await stub.changePassword(userPayload.uid, current, next);
+        if (!success) return c.json({ success: false, error: 'Invalid current password' }, 400);
+        return c.json({ success: true } satisfies ApiResponse);
     });
     app.get('/api/forust/users', protectedMiddleware, async (c) => {
         const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
