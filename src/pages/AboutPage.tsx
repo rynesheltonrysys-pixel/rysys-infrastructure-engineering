@@ -21,6 +21,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { RysysHeader } from '@/components/RysysHeader';
+import { RysysFooter } from '@/components/RysysFooter';
 export function AboutPage() {
   return (
     <div className="min-h-screen bg-rysys-cream text-rysys-black selection:bg-rysys-gold selection:text-white font-sans scroll-smooth">
@@ -244,13 +245,7 @@ export function AboutPage() {
           </div>
         </section>
       </main>
-      <footer className="border-t-4 border-rysys-black bg-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="font-mono text-xs font-bold text-muted-foreground uppercase">
-            © 2025 RYSYS Infrastructure & Engineering. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <RysysFooter />
     </div>
   );
 }

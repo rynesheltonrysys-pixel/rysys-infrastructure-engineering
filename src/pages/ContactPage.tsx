@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { RysysHeader } from '@/components/RysysHeader';
+import { RysysFooter } from '@/components/RysysFooter';
 const contactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -132,13 +133,7 @@ export function ContactPage() {
           </Card>
         </div>
       </main>
-      <footer className="border-t-4 border-rysys-black bg-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="font-mono text-xs font-bold text-muted-foreground uppercase">
-            © 2025 RYSYS Infrastructure & Engineering. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <RysysFooter />
     </div>
   );
 }
