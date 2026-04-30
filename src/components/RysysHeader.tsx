@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Trees, Menu } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Trees, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
@@ -9,20 +9,52 @@ interface RysysHeaderProps {
   current?: 'home' | 'about' | 'contact' | 'forust';
 }
 const NAV_LINKS = [
+  { name: 'Capabilities', href: '#capabilities', isAnchor: true },
+  { name: 'Leadership', href: '#leadership', isAnchor: true },
   { name: 'About', href: '/about', key: 'about' },
   { name: 'Contact', href: '/contact', key: 'contact' },
 ];
-export function RysysHeader({ current }: RysysHeaderProps) {
+export function RysysHeader({ isHome, current }: RysysHeaderProps) {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (isHome) {
+      e.preventDefault();
+      setOpen(false);
+      const id = href.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        window.history.pushState(null, '', href);
+      }
+    } else {
+      // Navigation to home with hash is handled by default Link behavior 
+      // but we close the sheet anyway
+      setOpen(false);
+    }
+  };
   const NavItems = ({ mobile = false }: { mobile?: boolean }) => (
     <>
       {NAV_LINKS.map((link) => {
-        const isActive = current === link.key;
+        const isActive = current === link.key || (current === 'home' && link.isAnchor && location.hash === link.href);
         const linkClass = cn(
-          "text-sm font-display font-bold uppercase tracking-widest transition-all hover:text-rysys-blue-power whitespace-nowrap",
-          isActive && "text-rysys-gold underline underline-offset-8 decoration-4 decoration-rysys-blue-power",
+          "text-sm font-bold uppercase tracking-widest transition-colors hover:text-rysys-gold whitespace-nowrap",
+          isActive && "text-rysys-gold underline underline-offset-8 decoration-4",
           mobile && "text-lg py-4 border-b-2 border-rysys-black/5 w-full text-left"
         );
+        if (link.isAnchor) {
+          return (
+            <Link
+              key={link.name}
+              to={isHome ? link.href : `/${link.href}`}
+              className={linkClass}
+              onClick={(e) => handleAnchorClick(e as any, link.href)}
+            >
+              {link.name}
+            </Link>
+          );
+        }
         return (
           <Link
             key={link.name}
@@ -48,18 +80,20 @@ export function RysysHeader({ current }: RysysHeaderProps) {
   );
   return (
     <nav className="sticky top-0 z-50 bg-white border-b-4 border-rysys-black px-4 sm:px-6 lg:px-8">
-      <div className="absolute bottom-0 left-0 right-0 filigree-gold opacity-30 h-[2px]" />
       <div className="max-w-7xl mx-auto h-20 md:h-24 flex items-center justify-between">
+        {/* Brand */}
         <Link to="/" className="flex items-center gap-3 group cursor-pointer" onClick={() => setOpen(false)}>
           <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex flex-col items-center justify-center shadow-brutal-gold group-hover:translate-x-[1px] group-hover:translate-y-[1px] group-hover:shadow-brutal-gold-hover transition-all leading-none overflow-hidden">
             <span className="text-white font-black text-[10px] select-none">RY</span>
             <span className="text-white font-black text-[10px] select-none">SYS</span>
           </div>
-          <span className="text-2xl font-display font-black tracking-tight uppercase">RYSYS</span>
+          <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
         </Link>
+        {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-8">
           <NavItems />
         </div>
+        {/* Mobile Nav Trigger */}
         <div className="lg:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>

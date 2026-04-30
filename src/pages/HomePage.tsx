@@ -1,11 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import {
   QrCode,
   Cpu,
   Globe,
   CheckCircle2,
-  Terminal,
   Mail,
   MapPin,
   UploadCloud,
@@ -14,55 +13,25 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-const NAVBAR_LINKS = [
-  { name: 'Capabilities', href: '#capabilities', isAnchor: true },
-  { name: 'Leadership', href: '#leadership', isAnchor: true },
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '/contact' },
-  { name: 'for-US-t', href: '/forust', isCta: true },
-];
+import { RysysHeader } from '@/components/RysysHeader';
 const TRUST_AFFILIATIONS = ['PSU', 'IEEE', 'NCEES', 'Grants.gov'];
 export function HomePage() {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        // Small timeout to ensure components are rendered
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
   return (
     <div className="min-h-screen bg-rysys-cream text-rysys-black selection:bg-rysys-gold selection:text-white font-sans scroll-smooth">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white border-b-4 border-rysys-black px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto h-20 md:h-24 flex items-center justify-between">
-          <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex flex-col items-center justify-center shadow-brutal-gold group-hover:translate-x-[1px] group-hover:translate-y-[1px] group-hover:shadow-brutal-gold-hover transition-all leading-none overflow-hidden">
-              <span className="text-white font-black text-[10px] select-none">RY</span>
-              <span className="text-white font-black text-[10px] select-none">SYS</span>
-            </div>
-            <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
-          </div>
-          <div className="hidden lg:flex items-center gap-8">
-            {NAVBAR_LINKS.map((link) => (
-              link.isCta ? (
-                <Link key={link.name} to={link.href} className="inline-block">
-                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-6 px-8 h-auto flex items-center gap-2">
-                    <Trees className="w-5 h-5 text-rysys-gold" />
-                    <span className="font-black uppercase tracking-[0.1em]">{link.name}</span>
-                    <Trees className="w-5 h-5 text-rysys-gold" />
-                  </Button>
-                </Link>
-              ) : (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-sm font-bold uppercase tracking-widest hover:text-rysys-gold transition-colors"
-                  onClick={(e) => {
-                    if (!link.isAnchor) return;
-                    e.preventDefault();
-                    document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                >
-                  {link.name}
-                </a>
-              )
-            ))}
-          </div>
-        </div>
-      </nav>
+      <RysysHeader isHome current="home" />
       {/* Hero Section */}
       <header className="relative overflow-hidden border-b-4 border-rysys-black">
         <div className="absolute inset-0 z-0 pointer-events-none">

@@ -1,21 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import {
   UploadCloud,
   CheckCircle2,
   QrCode,
   Code2,
   Globe,
-  Trees,
   Target,
   Route,
   Wrench,
   Users,
   Award,
-  MapPin,
-  ChevronDown
+  MapPin
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -24,48 +20,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-const NAV_LINKS = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/about', active: true },
-  { name: 'Contact', href: '/contact' },
-  { name: 'for-US-t', href: '/forust', isCta: true },
-];
+import { RysysHeader } from '@/components/RysysHeader';
 export function AboutPage() {
   return (
     <div className="min-h-screen bg-rysys-cream text-rysys-black selection:bg-rysys-gold selection:text-white font-sans scroll-smooth">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white border-b-4 border-rysys-black px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto h-20 md:h-24 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex flex-col items-center justify-center shadow-brutal-gold group-hover:translate-x-[1px] group-hover:translate-y-[1px] group-hover:shadow-brutal-gold-hover transition-all leading-none overflow-hidden">
-              <span className="text-white font-black text-[10px] select-none">RY</span>
-              <span className="text-white font-black text-[10px] select-none">SYS</span>
-            </div>
-            <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
-          </Link>
-          <div className="hidden md:flex items-center gap-10">
-            {NAV_LINKS.map((link) => (
-              link.isCta ? (
-                <Link key={link.name} to={link.href} className="inline-block">
-                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-6 px-8 h-auto flex items-center gap-2">
-                    <Trees className="w-5 h-5 text-rysys-gold" />
-                    <span className="font-black uppercase tracking-[0.1em]">{link.name}</span>
-                    <Trees className="w-5 h-5 text-rysys-gold" />
-                  </Button>
-                </Link>
-              ) : (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  className={`text-sm font-bold uppercase tracking-widest transition-colors hover:text-rysys-gold ${link.active ? 'text-rysys-gold underline underline-offset-8 decoration-4' : ''}`}
-                >
-                  {link.name}
-                </Link>
-              )
-            ))}
-          </div>
-        </div>
-      </nav>
+      <RysysHeader current="about" />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-24">
         {/* About Hero */}
         <section className="mb-24">
