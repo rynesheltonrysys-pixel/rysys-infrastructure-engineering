@@ -26,6 +26,8 @@ type ContactFormValues = z.infer<typeof contactSchema>;
 export function ContactPage() {
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
+    mode: "onChange",
+    reValidateMode: "onChange",
     defaultValues: {
       name: '',
       email: '',
