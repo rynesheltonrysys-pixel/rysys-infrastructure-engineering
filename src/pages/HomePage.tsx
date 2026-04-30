@@ -6,9 +6,7 @@ import {
   Globe,
   CheckCircle2,
   Trees,
-  UploadCloud,
-  HandHelping,
-  ShieldCheck
+  UploadCloud
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -47,13 +45,13 @@ export function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
               <div className="lg:col-span-7 space-y-8 md:space-y-12 lg:-translate-y-2">
-                <Badge className="bg-white text-rysys-black border-4 border-rysys-black rounded-none px-6 py-2 font-mono uppercase font-black text-xs shadow-brutal-gold-lg">
+                <Badge className="bg-white text-rysys-black border-4 border-rysys-black rounded-none px-6 py-2 font-mono uppercase font-black text-xs shadow-brutal-gold">
                   Public Service // <span className="text-rysys-gold">v1.2.0</span>
                 </Badge>
                 <h1 className="text-7xl md:text-[9rem] font-display font-black leading-[0.85] tracking-tight uppercase break-words">
                   CIVIC <br />
                   <span className="text-rysys-black">ENG.</span> <br />
-                  <span className="normal-case bg-gradient-to-br from-rysys-gold to-rysys-green-power bg-clip-text text-transparent">
+                  <span className="normal-case text-rysys-gold">
                     Community Stewardship.
                   </span>
                 </h1>
@@ -69,7 +67,7 @@ export function HomePage() {
                     className="absolute inset-0 w-full h-full object-cover grayscale opacity-30 group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-56 h-56 bg-rysys-gold faceted-gold shadow-brutal-gold-triple ring-2 ring-rysys-gold ring-offset-2 ring-offset-white flex flex-col items-center justify-center gap-2 group-hover:rotate-1 transition-transform">
+                    <div className="w-56 h-56 bg-rysys-gold faceted-gold shadow-brutal-gold ring-2 ring-rysys-gold ring-offset-2 ring-offset-white flex flex-col items-center justify-center gap-2 group-hover:rotate-1 transition-transform">
                       <div className="flex flex-col items-center leading-none">
                         <span className="text-white font-black text-7xl">RY</span>
                         <span className="text-white font-black text-7xl">SYS</span>
@@ -79,7 +77,7 @@ export function HomePage() {
                   </div>
                   <div className="absolute top-8 right-8 bg-white border-4 border-rysys-black px-4 py-2 shadow-brutal flex items-center gap-2">
                     <div className="w-3 h-3 bg-rysys-blue-power rounded-none animate-pulse" />
-                    <span className="font-mono text-[10px] font-black uppercase tracking-tighter">COMMUNITY_DRIVEN</span>
+                    <span className="font-mono text-[10px] font-black uppercase tracking-tighter">SERVICE STATUS ACTIVE</span>
                   </div>
                 </div>
                 <div className="absolute -bottom-8 -left-8 bg-rysys-green-power border-4 border-rysys-black px-8 py-6 shadow-brutal-lg z-20 text-white">
@@ -182,7 +180,7 @@ export function HomePage() {
         </section>
         {/* Portal Section */}
         <section id="portal" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="bg-rysys-green-power border-4 border-rysys-black p-12 md:p-20 text-center shadow-brutal-gold-lg relative overflow-hidden">
+          <div className="bg-rysys-green-power border-4 border-rysys-black p-12 md:p-20 text-center shadow-brutal-gold relative overflow-hidden">
             <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rotate-45 translate-x-20 -translate-y-20" />
             <h2 className="text-4xl md:text-7xl font-display font-black text-white uppercase tracking-tight mb-8 flex items-center justify-center gap-6">
               <Trees className="w-10 h-10 md:w-16 md:h-16 text-rysys-gold" />
@@ -194,10 +192,10 @@ export function HomePage() {
             </p>
             <div className="flex justify-center mt-4">
               <Link to="/forust">
-                <Button className="bg-white text-rysys-black border-4 border-rysys-black shadow-brutal-gold-triple hover:shadow-brutal-gold-hover hover:text-rysys-gold hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-10 px-16 text-2xl h-auto group flex items-center gap-4">
-                  <Trees className="w-8 h-8 text-rysys-green-power" />
+                <Button className="bg-rysys-green-power text-white border-4 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-10 px-16 text-2xl h-auto group flex items-center gap-4">
+                  <Trees className="w-8 h-8 text-rysys-gold" />
                   <span className="font-black uppercase tracking-[0.1em]">Enter Portal</span>
-                  <Trees className="w-8 h-8 text-rysys-green-power" />
+                  <Trees className="w-8 h-8 text-rysys-gold" />
                 </Button>
               </Link>
             </div>
@@ -215,7 +213,7 @@ function CapabilityCard({ icon, title, description, tags }: {
   tags: string[];
 }) {
   return (
-    <Card className="bg-white border-4 border-rysys-black rounded-none p-10 lg:p-12 shadow-brutal hover:shadow-brutal-gold-2 hover:faceted-gold transition-all duration-300 group">
+    <Card className="bg-white border-4 border-rysys-black rounded-none p-10 lg:p-12 shadow-brutal hover:shadow-brutal-gold transition-all duration-300 group">
       <div className="w-16 h-16 bg-rysys-grey border-4 border-rysys-black flex items-center justify-center mb-8 group-hover:bg-rysys-blue-power group-hover:text-white transition-colors">
         {icon}
       </div>

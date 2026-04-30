@@ -25,10 +25,10 @@ const regSchema = z.object({
   message: "Parity error: Passwords mismatch",
   path: ["confirm"],
 });
-type RegisterFormValues = z.infer<typeof regSchema>;
+type RegisterFormInputs = z.input<typeof regSchema>;
 export function RegisterPage() {
   const navigate = useNavigate();
-  const form = useForm<RegisterFormValues>({
+  const form = useForm<RegisterFormInputs>({
     resolver: zodResolver(regSchema),
     defaultValues: {
       email: '',
@@ -42,7 +42,7 @@ export function RegisterPage() {
       terms: true
     },
   });
-  async function onSubmit(values: RegisterFormValues) {
+  async function onSubmit(values: RegisterFormInputs) {
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
