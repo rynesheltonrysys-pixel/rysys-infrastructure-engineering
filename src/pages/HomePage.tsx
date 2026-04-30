@@ -7,7 +7,8 @@ import {
   Terminal,
   Code2,
   Mail,
-  MapPin
+  MapPin,
+  UploadCloud
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -55,8 +56,8 @@ export function HomePage() {
       <header className="relative overflow-hidden border-b-4 border-rysys-black">
         {/* Portland Skyline Background Overlay */}
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <img 
-            src="https://images.unsplash.com/photo-1541457523724-95f54f7740cc?auto=format&fit=crop&q=80&w=1600" 
+          <img
+            src="https://images.unsplash.com/photo-1541457523724-95f54f7740cc?auto=format&fit=crop&q=80&w=1600"
             alt="Portland Skyline"
             className="w-full h-full object-cover object-center grayscale contrast-125 opacity-20"
           />
@@ -147,9 +148,18 @@ export function HomePage() {
           <div className="bg-white border-4 border-rysys-black shadow-brutal-gold-lg p-10 md:p-14 overflow-hidden relative">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 items-center">
               <div className="lg:col-span-4">
-                <div className="aspect-[4/5] bg-rysys-blue border-4 border-rysys-black shadow-brutal relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center grayscale contrast-125" />
-                  <div className="absolute inset-0 bg-rysys-gold/20 mix-blend-multiply" />
+                <div className="aspect-[4/5] bg-rysys-grey border-4 border-rysys-black shadow-brutal relative p-6 flex items-center justify-center overflow-hidden group cursor-pointer hover:bg-white transition-colors duration-300">
+                  {/* Placeholder for future portrait upload */}
+                  <div 
+                    className="w-full h-full border-4 border-dashed border-rysys-gold/40 group-hover:border-rysys-gold flex flex-col items-center justify-center gap-4 text-center transition-colors"
+                    aria-label="Upload Leadership Portrait Placeholder"
+                  >
+                    <UploadCloud className="w-12 h-12 text-rysys-gold animate-bounce group-hover:scale-110 transition-transform" />
+                    <span className="font-black text-xs uppercase tracking-widest text-rysys-gold px-4">
+                      Upload Portrait
+                    </span>
+                  </div>
+                  {/* Note: Simply replace the inner div with an <img> or set a bg-image on the parent to swap to a real photo */}
                 </div>
               </div>
               <div className="lg:col-span-8 space-y-8">
@@ -226,9 +236,9 @@ export function HomePage() {
                   <MapPin className="w-4 h-4 text-rysys-gold" />
                   <span>Portland, Oregon</span>
                 </div>
-                <a href="mailto:rshelton93@proton.me" className="flex items-center gap-2 hover:text-rysys-gold transition-colors">
+                <a href="mailto:support@rysys.org" className="flex items-center gap-2 hover:text-rysys-gold transition-colors">
                   <Mail className="w-4 h-4 text-rysys-gold" />
-                  <span>rshelton93@proton.me</span>
+                  <span>support@rysys.org</span>
                 </a>
                 <span className="hover:text-rysys-gold cursor-pointer transition-colors">LinkedIn</span>
                 <span className="hover:text-rysys-gold cursor-pointer transition-colors">Twitter (X)</span>
