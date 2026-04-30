@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { PageTransition } from '@/components/PageTransition';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { RysysHeader } from '@/components/RysysHeader';
@@ -33,6 +34,7 @@ export function ContactPage() {
   return (
     <div className="min-h-screen bg-rysys-cream text-rysys-black selection:bg-rysys-gold selection:text-white font-sans scroll-smooth">
       <RysysHeader current="contact" />
+      <PageTransition>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-24">
         <div className="mb-16">
           <Badge className="bg-white text-rysys-black border-2 border-rysys-gold rounded-none px-4 py-1 font-mono uppercase font-bold text-sm shadow-brutal-gold mb-8">
@@ -134,6 +136,7 @@ export function ContactPage() {
         </div>
       </main>
       <RysysFooter />
+      </PageTransition>
     </div>
   );
 }

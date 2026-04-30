@@ -20,12 +20,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { PageTransition } from '@/components/PageTransition';
 import { RysysHeader } from '@/components/RysysHeader';
 import { RysysFooter } from '@/components/RysysFooter';
 export function AboutPage() {
   return (
     <div className="min-h-screen bg-rysys-cream text-rysys-black selection:bg-rysys-gold selection:text-white font-sans scroll-smooth">
       <RysysHeader current="about" />
+      <PageTransition>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-24">
         {/* About Hero */}
         <section className="mb-24">
@@ -173,6 +175,7 @@ export function AboutPage() {
         </section>
       </main>
       <RysysFooter />
+      </PageTransition>
     </div>
   );
 }

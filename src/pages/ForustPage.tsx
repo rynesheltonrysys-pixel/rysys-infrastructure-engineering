@@ -23,6 +23,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+import { PageTransition } from '@/components/PageTransition';
 import { toast } from 'sonner';
 import type { Doc, Message, Comment, UserPublic } from '@shared/types';
 export function ForustPage() {
@@ -123,6 +124,7 @@ export function ForustPage() {
           </Button>
         </div>
       </header>
+      <PageTransition className="flex-1 flex flex-col">
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8 space-y-8">
@@ -238,6 +240,7 @@ export function ForustPage() {
           </div>
         </div>
       </main>
+      </PageTransition>
     </div>
   );
 }

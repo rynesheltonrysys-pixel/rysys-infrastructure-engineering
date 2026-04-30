@@ -18,6 +18,7 @@ import { ContactPage } from '@/pages/ContactPage'
 import { SigninPage } from '@/pages/SigninPage'
 import { RegisterPage } from '@/pages/RegisterPage'
 import { ForustPage } from '@/pages/ForustPage'
+import { NotFoundPage } from '@/pages/NotFoundPage'
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -48,6 +49,11 @@ const router = createBrowserRouter([
   {
     path: "/forust",
     element: <ForustPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
     errorElement: <RouteErrorBoundary />,
   },
 ]);

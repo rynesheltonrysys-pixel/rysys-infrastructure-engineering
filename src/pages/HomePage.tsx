@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { RysysHeader } from '@/components/RysysHeader';
+import { PageTransition } from '@/components/PageTransition';
 import { RysysFooter } from '@/components/RysysFooter';
 const TRUST_AFFILIATIONS = ['PSU', 'IEEE', 'NCEES', 'Grants.gov'];
 export function HomePage() {
@@ -30,6 +31,7 @@ export function HomePage() {
   return (
     <div className="min-h-screen bg-rysys-cream text-rysys-black selection:bg-rysys-gold selection:text-white font-sans scroll-smooth">
       <RysysHeader current="home" />
+      <PageTransition>
       {/* Hero Section */}
       <header className="relative overflow-hidden border-b-4 border-rysys-black bg-white">
         <div className="absolute inset-0 z-0 pointer-events-none">
@@ -200,6 +202,7 @@ export function HomePage() {
         </div>
       </section>
       <RysysFooter />
+      </PageTransition>
     </div>
   );
 }
