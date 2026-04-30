@@ -16,7 +16,7 @@ export function RysysFooter() {
               <span className="text-2xl font-display font-black tracking-tight uppercase">RYSYS</span>
             </div>
             <p className="text-lg font-bold text-muted-foreground leading-relaxed max-w-md">
-              Engineering the physical foundations of tomorrow's digital world. Strength, precision, and intelligence at scale.
+              Serving Portland communities through practical engineering, transparency, and stewardship. Built for for-US-t.
             </p>
           </div>
           <div>
@@ -33,7 +33,7 @@ export function RysysFooter() {
             </div>
           </div>
           <div>
-            <h4 className="font-display font-black uppercase tracking-widest mb-6 border-b-2 border-rysys-gold pb-2 inline-block text-xs">Contact</h4>
+            <h4 className="font-display font-black uppercase tracking-widest mb-6 border-b-2 border-rysys-gold pb-2 inline-block text-xs">Connect</h4>
             <div className="space-y-4 font-bold uppercase text-sm flex flex-col text-muted-foreground">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-rysys-gold shrink-0" />
@@ -48,10 +48,10 @@ export function RysysFooter() {
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t-2 border-rysys-grey gap-4">
           <span className="font-mono text-xs font-bold text-muted-foreground uppercase">
-            © 2025 RYSYS Infrastructure & Engineering. All rights reserved.
+            © 2025 RYSYS Infrastructure & Community Stewardship.
           </span>
           <span className="font-mono text-[10px] font-bold text-muted-foreground uppercase opacity-50">
-            v1.2.0 // Silicon Forest
+            v1.2.0 // Community First
           </span>
         </div>
       </div>

@@ -30,7 +30,7 @@ export function SigninPage() {
       if (json.success) {
         saveToken(json.data.token);
         saveUser(json.data.user);
-        toast.success('Welcome back to RYSYS.');
+        toast.success('Welcome back to the RYSYS community.');
         navigate('/forust');
       } else {
         toast.error(json.error || 'Login failed');
@@ -53,7 +53,7 @@ export function SigninPage() {
       <main className="flex-1 flex items-center justify-center p-6">
         <Card className="w-full max-w-md p-8 border-4 border-rysys-black shadow-brutal-lg bg-white rounded-none">
           <h1 className="text-4xl font-black uppercase mb-2 tracking-tighter">Login</h1>
-          <p className="text-muted-foreground font-bold uppercase text-[10px] mb-8 tracking-[0.1em]">Access the for-US-t Infrastructure Portal</p>
+          <p className="text-muted-foreground font-bold uppercase text-[10px] mb-8 tracking-[0.1em]">Access the for-US-t Community Portal</p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField

@@ -16,38 +16,39 @@ const regSchema = z.object({
   password: z.string().min(8, "Security threshold: 8 chars"),
   confirm: z.string(),
   name: z.string().min(2, "Name required (min 2 chars)"),
-  state: z.string().optional().default(""),
-  city: z.string().optional().default("Portland"),
-  neighborhood: z.string().optional().default(""),
+  state: z.string().default("OR"),
+  city: z.string().default("Portland"),
+  neighborhood: z.string().default(""),
   reason: z.string().min(10, "Minimum 10 characters required"),
   terms: z.literal(true, { message: "Must accept protocols" }),
 }).refine(data => data.password === data.confirm, {
   message: "Parity error: Passwords mismatch",
   path: ["confirm"],
 });
+type RegisterFormValues = z.infer<typeof regSchema>;
 export function RegisterPage() {
   const navigate = useNavigate();
-  const form = useForm<z.infer<typeof regSchema>>({
+  const form = useForm<RegisterFormValues>({
     resolver: zodResolver(regSchema),
-    defaultValues: { 
-      email: '', 
-      password: '', 
-      confirm: '', 
+    defaultValues: {
+      email: '',
+      password: '',
+      confirm: '',
       name: '',
-      state: '',
+      state: 'OR',
       city: 'Portland',
       neighborhood: '',
       reason: '',
-      terms: true 
+      terms: true
     },
   });
-  async function onSubmit(values: z.infer<typeof regSchema>) {
+  async function onSubmit(values: RegisterFormValues) {
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: values.email, 
+        body: JSON.stringify({
+          email: values.email,
           pass: values.password,
           name: values.name,
           state: values.state,
@@ -84,7 +85,7 @@ export function RegisterPage() {
         <div className="py-8 md:py-10 lg:py-12 flex items-center justify-center">
           <Card className="w-full max-w-2xl p-8 border-4 border-rysys-black shadow-brutal-lg bg-white rounded-none">
             <h1 className="text-4xl font-black uppercase mb-2 tracking-tighter">Register</h1>
-            <p className="text-muted-foreground font-bold uppercase text-[10px] mb-8 tracking-[0.1em]">Establish your Node identity within the for-US-t network</p>
+            <p className="text-muted-foreground font-bold uppercase text-[10px] mb-8 tracking-[0.1em]">Join the for-US-t community to collaborate on civic projects</p>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -153,7 +154,7 @@ export function RegisterPage() {
                           <FormItem>
                             <FormLabel className="font-black uppercase text-xs tracking-widest">State</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="OR" className="border-2 border-rysys-black bg-rysys-cream rounded-none font-bold" />
+                              <Input {...field} className="border-2 border-rysys-black bg-rysys-cream rounded-none font-bold" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -195,7 +196,7 @@ export function RegisterPage() {
                     <FormItem>
                       <FormLabel className="font-black uppercase text-xs tracking-widest">Reason for Application</FormLabel>
                       <FormControl>
-                        <Textarea {...field} placeholder="WHY DO YOU SEEK ACCESS TO RYSYS INFRASTRUCTURE? (MIN 10 CHARS)" className="border-2 border-rysys-black bg-rysys-cream rounded-none font-bold min-h-[100px]" />
+                        <Textarea {...field} placeholder="HOW DO YOU SEEK TO COLLABORATE ON CIVIC INFRASTRUCTURE? (MIN 10 CHARS)" className="border-2 border-rysys-black bg-rysys-cream rounded-none font-bold min-h-[100px]" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -213,7 +214,7 @@ export function RegisterPage() {
                           className="border-2 border-rysys-black rounded-none data-[state=checked]:bg-rysys-gold"
                         />
                       </FormControl>
-                      <FormLabel className="text-[10px] font-bold uppercase tracking-tight">Accept Infrastructure Protocols & Security Standards</FormLabel>
+                      <FormLabel className="text-[10px] font-bold uppercase tracking-tight">Accept Community Stewardship Protocols</FormLabel>
                     </FormItem>
                   )}
                 />
