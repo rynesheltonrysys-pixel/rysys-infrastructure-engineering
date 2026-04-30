@@ -1,5 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
-import type { DemoItem, UserPublic, Doc, DocVersion, Comment, Message, AuthTokenPayload } from '@shared/types';
+import type { DemoItem, UserPublic, Doc, DocVersion, Comment, Message, AuthTokenPayload, UserProfile, User } from '@shared/types';
 import { MOCK_ITEMS } from '@shared/mock-data';
 export class GlobalDurableObject extends DurableObject {
     private USERS_KEY = "forust_users";
@@ -15,22 +15,51 @@ export class GlobalDurableObject extends DurableObject {
         }
         return secret;
     }
-    async registerUser(email: string, pass: string) {
+    async registerUser(email: string, pass: string, profile?: UserProfile) {
         const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
         if (Object.values(users).some(u => u.email === email)) return null;
         const id = crypto.randomUUID();
-        const newUser = { id, email, pass, createdAt: new Date().toISOString() };
+        const normalizedProfile = {
+            name: profile?.name || "",
+            state: profile?.state || "",
+            city: profile?.city || "Portland",
+            neighborhood: profile?.neighborhood || "",
+            reason: profile?.reason || ""
+        };
+        const newUser = { 
+            id, 
+            email, 
+            pass, 
+            createdAt: new Date().toISOString(),
+            profile: normalizedProfile
+        };
         users[id] = newUser;
         await this.ctx.storage.put(this.USERS_KEY, users);
         const token = await this.issueToken(id, email);
-        return { token, user: { id, email, createdAt: newUser.createdAt } };
+        return { 
+            token, 
+            user: { 
+                id, 
+                email, 
+                createdAt: newUser.createdAt,
+                profile: normalizedProfile
+            } as User 
+        };
     }
     async loginUser(email: string, pass: string) {
         const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
         const user = Object.values(users).find(u => u.email === email && u.pass === pass);
         if (!user) return null;
         const token = await this.issueToken(user.id, email);
-        return { token, user: { id: user.id, email: user.email, createdAt: user.createdAt } };
+        return { 
+            token, 
+            user: { 
+                id: user.id, 
+                email: user.email, 
+                createdAt: user.createdAt,
+                profile: user.profile
+            } as User
+        };
     }
     async issueToken(uid: string, email: string): Promise<string> {
         const payload: AuthTokenPayload = {
@@ -93,9 +122,7 @@ export class GlobalDurableObject extends DurableObject {
         const idx = docs.findIndex(d => d.id === docId);
         if (idx === -1) return null;
         const doc = docs[idx];
-        // Owner Check
         if (doc.ownerId !== uid) return null;
-        // Normalize emails
         const normalized = Array.from(new Set(
             shareWithEmails
                 .map(e => e.trim().toLowerCase())

@@ -17,9 +17,12 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
         await next();
     };
     app.post('/api/auth/register', async (c) => {
-        const { email, password } = await c.req.json();
+        const body = await c.req.json();
+        const { email, pass, password, name, state, city, neighborhood, reason } = body;
+        const pwd = pass ?? password;
+        if (!email || !pwd) return c.json({ success: false, error: 'Missing credentials' }, 400);
         const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
-        const result = await stub.registerUser(email, password);
+        const result = await stub.registerUser(email, pwd, { name, state, city, neighborhood, reason });
         if (!result) return c.json({ success: false, error: 'User already exists' }, 400);
         return c.json({ success: true, data: result });
     });

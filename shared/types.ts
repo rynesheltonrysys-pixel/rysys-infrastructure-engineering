@@ -8,6 +8,19 @@ export interface ApiResponse<T = unknown> {
   data?: T;
   error?: string;
 }
+export interface UserProfile {
+  name: string;
+  state?: string;
+  city?: string;
+  neighborhood?: string;
+  reason?: string;
+}
+export interface User {
+  id: string;
+  email: string;
+  createdAt: string;
+  profile?: UserProfile;
+}
 export interface UserPublic {
   id: string;
   email: string;
