@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { setToken, setUser } from '@/lib/auth';
+import { setToken as saveToken, setUser as saveUser } from '@/lib/auth';
 import { toast } from 'sonner';
 const signinSchema = z.object({
   email: z.string().email(),
@@ -28,8 +28,8 @@ export function SigninPage() {
       });
       const json = await res.json();
       if (json.success) {
-        setToken(json.data.token);
-        setUser(json.data.user);
+        saveToken(json.data.token);
+        saveUser(json.data.user);
         toast.success('Welcome back to RYSYS.');
         navigate('/forust');
       } else {

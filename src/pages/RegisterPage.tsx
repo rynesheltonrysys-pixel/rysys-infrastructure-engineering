@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
-import { setToken, setUser } from '@/lib/auth';
+import { setToken as saveToken, setUser as saveUser } from '@/lib/auth';
 import { toast } from 'sonner';
 const regSchema = z.object({
   email: z.string().email(),
@@ -34,8 +34,8 @@ export function RegisterPage() {
       });
       const json = await res.json();
       if (json.success) {
-        setToken(json.data.token);
-        setUser(json.data.user);
+        saveToken(json.data.token);
+        saveUser(json.data.user);
         toast.success('Registration finalized.');
         navigate('/forust');
       } else {
@@ -107,10 +107,10 @@ export function RegisterPage() {
                 render={({ field }) => (
                   <FormItem className="flex items-center space-x-2 space-y-0 pt-2">
                     <FormControl>
-                      <Checkbox 
-                        checked={field.value} 
-                        onCheckedChange={(checked) => field.onChange(checked === true)} 
-                        className="border-2 border-rysys-black rounded-none data-[state=checked]:bg-rysys-gold" 
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={(checked) => field.onChange(checked === true)}
+                        className="border-2 border-rysys-black rounded-none data-[state=checked]:bg-rysys-gold"
                       />
                     </FormControl>
                     <FormLabel className="text-[10px] font-bold uppercase tracking-tight">Accept Infrastructure Protocols</FormLabel>

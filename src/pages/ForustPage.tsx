@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-  FileText, Plus, LogOut, Send
+  FileText, Plus, LogOut, Send, History, MessageSquare, Loader2
 } from 'lucide-react';
 import { isAuthed, authHeader, clearAuth, getUser } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
@@ -9,23 +9,16 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@radix-ui/react-dialog';
 import { toast } from 'sonner';
-import type { Doc, Message } from '@shared/types';
+import type { Doc, Message, Comment } from '@shared/types';
 export function ForustPage() {
   const navigate = useNavigate();
   const [docs, setDocs] = useState<Doc[]>([]);
   const [msgs, setMsgs] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const user = getUser();
-  useEffect(() => {
-    if (!isAuthed()) {
-      navigate('/signin');
-    } else {
-      fetchData();
-    }
-  }, [navigate]);
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [dRes, mRes] = await Promise.all([
         fetch('/api/forust/docs', { headers: authHeader() }),
@@ -34,12 +27,19 @@ export function ForustPage() {
       const [dJson, mJson] = await Promise.all([dRes.json(), mRes.json()]);
       if (dJson.success) setDocs(dJson.data);
       if (mJson.success) setMsgs(mJson.data);
-    } catch { 
-      toast.error('Sync failure'); 
-    } finally { 
-      setLoading(false); 
+    } catch {
+      toast.error('Sync failure');
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
+  useEffect(() => {
+    if (!isAuthed()) {
+      navigate('/signin');
+    } else {
+      fetchData();
+    }
+  }, [navigate, fetchData]);
   const handleLogout = () => {
     clearAuth();
     navigate('/signin');
@@ -59,7 +59,7 @@ export function ForustPage() {
           <Badge className="hidden sm:inline-flex bg-rysys-green-power text-white border-2 border-rysys-black rounded-none px-3 font-mono text-[10px]">
             NODE: {user?.email}
           </Badge>
-          <Button variant="ghost" size="icon" onClick={handleLogout} className="border-2 border-rysys-black rounded-none hover:bg-rysys-grey">
+          <Button variant="ghost" size="icon" onClick={handleLogout} className="border-2 border-rysys-black rounded-none hover:bg-rysys-grey h-10 w-10">
             <LogOut className="w-4 h-4" />
           </Button>
         </div>
@@ -73,7 +73,7 @@ export function ForustPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {docs.map(doc => (
-                <DocCard key={doc.id} doc={doc} />
+                <DocCard key={doc.id} initialDoc={doc} />
               ))}
               {docs.length === 0 && (
                 <div className="col-span-2 py-20 border-4 border-dashed border-rysys-black/20 flex flex-col items-center justify-center opacity-50 bg-white/30">
@@ -105,9 +105,10 @@ export function ForustPage() {
     </div>
   );
 }
-function DocCard({ doc }: { doc: Doc }) {
+function DocCard({ initialDoc }: { initialDoc: Doc }) {
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Card className="p-6 border-4 border-rysys-black shadow-brutal hover:shadow-brutal-gold hover:-translate-y-1 transition-all cursor-pointer bg-white rounded-none group">
           <div className="flex items-start justify-between mb-4">
@@ -115,46 +116,197 @@ function DocCard({ doc }: { doc: Doc }) {
               <FileText className="w-5 h-5 group-hover:text-white transition-colors" />
             </div>
             <Badge className="bg-white border-2 border-rysys-black text-rysys-black rounded-none font-mono text-[10px]">
-              V{doc.versions.length}
+              V{initialDoc.versions.length}
             </Badge>
           </div>
-          <h3 className="text-xl font-black uppercase tracking-tighter mb-2 group-hover:text-rysys-gold transition-colors">{doc.title}</h3>
-          <p className="text-[10px] font-bold text-muted-foreground uppercase">Updated {new Date(doc.updatedAt).toLocaleDateString()}</p>
+          <h3 className="text-xl font-black uppercase tracking-tighter mb-2 group-hover:text-rysys-gold transition-colors">{initialDoc.title}</h3>
+          <p className="text-[10px] font-bold text-muted-foreground uppercase">Updated {new Date(initialDoc.updatedAt).toLocaleDateString()}</p>
         </Card>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl border-4 border-rysys-black rounded-none bg-rysys-cream p-0 overflow-hidden">
-        <DocViewer doc={doc} />
+      <DialogContent className="fixed left-[50%] top-[50%] z-50 w-full max-w-5xl translate-x-[-50%] translate-y-[-50%] border-4 border-rysys-black rounded-none bg-rysys-cream p-0 shadow-brutal-lg overflow-hidden outline-none">
+        <DocViewer doc={initialDoc} />
       </DialogContent>
     </Dialog>
   );
 }
-function DocViewer({ doc }: { doc: Doc }) {
-  const [activeVer, setActiveVer] = useState(doc.versions[0]?.version ?? 1);
-  const version = doc.versions.find(v => v.version === activeVer) || doc.versions[0];
+function DocViewer({ doc: initialDoc }: { doc: Doc }) {
+  const [doc, setDoc] = useState<Doc>(initialDoc);
+  const [activeVer, setActiveVer] = useState(doc.versions[doc.versions.length - 1]?.version ?? 1);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentsLoading, setCommentsLoading] = useState(true);
+  const [newComment, setNewComment] = useState('');
+  const [isPostingComment, setIsPostingComment] = useState(false);
+  const [newVersionContent, setNewVersionContent] = useState('');
+  const [isCommitting, setIsCommitting] = useState(false);
+  const fetchComments = useCallback(async () => {
+    setCommentsLoading(true);
+    try {
+      const res = await fetch(`/api/forust/docs/${doc.id}/comments`, { headers: authHeader() });
+      const json = await res.json();
+      if (json.success) setComments(json.data);
+    } catch {
+      toast.error('Failed to load intelligence feed');
+    } finally {
+      setCommentsLoading(false);
+    }
+  }, [doc.id]);
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
+  const handlePostComment = async () => {
+    if (newComment.length < 2) return;
+    setIsPostingComment(true);
+    try {
+      const res = await fetch(`/api/forust/docs/${doc.id}/comments`, {
+        method: 'POST',
+        headers: authHeader(),
+        body: JSON.stringify({ version: activeVer, text: newComment })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setComments(prev => [...prev, json.data]);
+        setNewComment('');
+        toast.success('Comment logged');
+      }
+    } catch {
+      toast.error('Communication error');
+    } finally {
+      setIsPostingComment(false);
+    }
+  };
+  const handleCommitVersion = async () => {
+    if (!newVersionContent.trim()) return;
+    setIsCommitting(true);
+    try {
+      const res = await fetch(`/api/forust/docs/${doc.id}/versions`, {
+        method: 'POST',
+        headers: authHeader(),
+        body: JSON.stringify({ content: newVersionContent })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setDoc(json.data);
+        setActiveVer(json.data.versions.length);
+        setNewVersionContent('');
+        toast.success('Protocol updated to V' + json.data.versions.length);
+      }
+    } catch {
+      toast.error('System failure during commit');
+    } finally {
+      setIsCommitting(false);
+    }
+  };
+  const currentVersion = doc.versions.find(v => v.version === activeVer) || doc.versions[doc.versions.length - 1];
+  const verComments = comments.filter(c => c.version === activeVer);
   return (
-    <div className="flex flex-col h-[80vh]">
-      <div className="p-6 border-b-4 border-rysys-black bg-white flex items-center justify-between">
+    <div className="flex flex-col h-[85vh] lg:h-[90vh]">
+      <div className="p-6 border-b-4 border-rysys-black bg-white flex items-center justify-between shrink-0">
         <div>
-          <h2 className="text-2xl font-black uppercase tracking-tighter">{doc.title}</h2>
-          <p className="text-[10px] font-bold text-muted-foreground uppercase">Doc ID: {doc.id}</p>
+          <div className="flex items-center gap-3 mb-1">
+            <h2 className="text-2xl font-black uppercase tracking-tighter">{doc.title}</h2>
+            {doc.sharedWith.length > 0 && (
+              <div className="flex gap-1">
+                {doc.sharedWith.map(email => (
+                  <Badge key={email} className="bg-rysys-grey text-rysys-black border border-rysys-black rounded-none text-[8px] font-bold">
+                    {email.split('@')[0]}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">INFRASTRUCTURE ID: {doc.id}</p>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-black uppercase">Version</span>
+        <div className="flex items-center gap-3">
+          <History className="w-4 h-4 text-rysys-gold" />
           <select
             value={activeVer}
             onChange={(e) => setActiveVer(Number(e.target.value))}
-            className="border-2 border-rysys-black bg-rysys-cream px-2 py-1 font-mono text-sm outline-none focus:border-rysys-gold"
+            className="border-3 border-rysys-black bg-white px-3 py-1.5 font-mono text-sm font-black outline-none focus:ring-2 focus:ring-rysys-gold"
           >
-            {[...doc.versions].reverse().map(v => <option key={v.version} value={v.version}>v{v.version}</option>)}
+            {[...doc.versions].reverse().map(v => (
+              <option key={v.version} value={v.version}>VERSION {v.version}</option>
+            ))}
           </select>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto p-8 font-mono text-sm leading-relaxed bg-white/50">
-        <pre className="whitespace-pre-wrap">{version.content}</pre>
-      </div>
-      <div className="p-6 border-t-4 border-rysys-black bg-white">
-         <Badge className="rounded-none bg-rysys-gold text-white mb-2 uppercase font-black text-[10px]">Technical Commentary Required</Badge>
-         <p className="text-xs text-muted-foreground italic">Note: Live technical commentary syncing coming in v1.3.0</p>
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        {/* Content Viewer */}
+        <div className="flex-1 overflow-y-auto p-8 font-mono text-sm leading-relaxed bg-white/40 border-b-4 lg:border-b-0 lg:border-r-4 border-rysys-black">
+          <div className="mb-6 pb-2 border-b-2 border-rysys-black/5 flex justify-between items-center">
+            <span className="text-[10px] font-black uppercase tracking-widest">Protocol Buffer</span>
+            <span className="text-[10px] font-mono opacity-50">STAMP: {new Date(currentVersion.createdAt).toLocaleString()}</span>
+          </div>
+          <pre className="whitespace-pre-wrap">{currentVersion.content}</pre>
+          {/* New Version Commit Box */}
+          <div className="mt-12 pt-8 border-t-4 border-rysys-black">
+            <h4 className="text-sm font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Plus className="w-4 h-4" /> Commit Iteration
+            </h4>
+            <div className="bg-white border-3 border-rysys-black p-4 shadow-brutal-hover">
+              <Textarea 
+                value={newVersionContent}
+                onChange={e => setNewVersionContent(e.target.value)}
+                placeholder="INPUT UPDATED SPECIFICATIONS..."
+                className="min-h-[120px] border-none bg-transparent font-mono focus-visible:ring-0 resize-none p-0"
+              />
+              <div className="mt-4 flex justify-end">
+                <Button 
+                  onClick={handleCommitVersion} 
+                  disabled={!newVersionContent.trim() || isCommitting}
+                  className="bg-rysys-black text-white rounded-none font-black uppercase h-10 px-6 shadow-brutal hover:shadow-brutal-gold transition-all"
+                >
+                  {isCommitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                  DEPLOY V{doc.versions.length + 1}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Intelligence / Comments Sidebar */}
+        <div className="w-full lg:w-[400px] flex flex-col bg-white overflow-hidden">
+          <div className="p-4 border-b-2 border-rysys-black bg-rysys-grey/30 flex items-center gap-2">
+            <MessageSquare className="w-4 h-4" />
+            <h3 className="text-xs font-black uppercase tracking-widest">Intelligence Feed (V{activeVer})</h3>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {commentsLoading ? (
+              [1, 2, 3].map(i => (
+                <div key={i} className="h-20 bg-rysys-grey/50 animate-pulse border-2 border-rysys-black/10" />
+              ))
+            ) : verComments.length > 0 ? (
+              verComments.map(c => (
+                <div key={c.id} className="p-3 border-2 border-rysys-black shadow-brutal-hover bg-rysys-cream/20">
+                  <div className="flex justify-between items-center mb-1 text-[8px] font-black uppercase border-b border-rysys-black/5 pb-1">
+                    <span className="text-rysys-gold">{c.authorEmail}</span>
+                    <span className="opacity-40">{new Date(c.createdAt).toLocaleDateString()}</span>
+                  </div>
+                  <p className="text-xs font-medium leading-relaxed">{c.text}</p>
+                </div>
+              ))
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center opacity-30 border-4 border-dashed border-rysys-black/10 p-8 text-center">
+                <MessageSquare className="w-8 h-8 mb-2" />
+                <p className="text-[10px] font-black uppercase">No Intelligence Logged</p>
+              </div>
+            )}
+          </div>
+          <div className="p-4 border-t-4 border-rysys-black bg-rysys-cream">
+            <Textarea 
+              value={newComment}
+              onChange={e => setNewComment(e.target.value)}
+              placeholder="LOG COMMENTARY..."
+              className="border-2 border-rysys-black bg-white rounded-none text-xs font-bold min-h-[80px] focus-visible:ring-rysys-gold"
+            />
+            <Button 
+              onClick={handlePostComment}
+              disabled={newComment.length < 2 || isPostingComment}
+              className="w-full mt-2 bg-rysys-black text-white rounded-none font-black uppercase text-[10px] h-10 shadow-brutal hover:shadow-brutal-gold transition-all"
+            >
+              {isPostingComment ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <Send className="w-3 h-3 mr-2" />}
+              Transmit Intelligence
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -163,27 +315,33 @@ function NewDocDialog({ onCreated }: { onCreated: () => void }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [sharing, setSharing] = useState('');
+  const [open, setOpen] = useState(false);
   const handleSubmit = async () => {
     if (!title || !content) return;
-    const res = await fetch('/api/forust/docs', {
-      method: 'POST',
-      headers: authHeader(),
-      body: JSON.stringify({ title, content, shareWith: sharing.split(',').map(s => s.trim()).filter(Boolean) })
-    });
-    if (res.ok) {
-      toast.success('Proposal Drafted');
-      onCreated();
-      setTitle(''); setContent(''); setSharing('');
+    try {
+      const res = await fetch('/api/forust/docs', {
+        method: 'POST',
+        headers: authHeader(),
+        body: JSON.stringify({ title, content, shareWith: sharing.split(',').map(s => s.trim()).filter(Boolean) })
+      });
+      if (res.ok) {
+        toast.success('Proposal Drafted');
+        onCreated();
+        setTitle(''); setContent(''); setSharing('');
+        setOpen(false);
+      }
+    } catch {
+      toast.error('System error');
     }
   };
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-rysys-black text-white rounded-none font-black uppercase shadow-brutal hover:shadow-brutal-gold transition-all h-12">
+        <Button className="bg-rysys-black text-white rounded-none font-black uppercase shadow-brutal hover:shadow-brutal-gold transition-all h-12 px-6">
           <Plus className="w-4 h-4 mr-2" /> New Proposal
         </Button>
       </DialogTrigger>
-      <DialogContent className="border-4 border-rysys-black rounded-none bg-white p-8">
+      <DialogContent className="fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] border-4 border-rysys-black rounded-none bg-white p-8 shadow-brutal-lg outline-none">
         <DialogHeader>
           <DialogTitle className="text-3xl font-black uppercase tracking-tighter">Create Technical Proposal</DialogTitle>
         </DialogHeader>
@@ -200,7 +358,7 @@ function NewDocDialog({ onCreated }: { onCreated: () => void }) {
             <label className="text-[10px] font-black uppercase tracking-widest">Initial Content</label>
             <Textarea value={content} onChange={e => setContent(e.target.value)} className="border-2 border-rysys-black rounded-none bg-rysys-cream min-h-[200px] font-mono" placeholder="DEFINE SYSTEM ARCHITECTURE..." />
           </div>
-          <Button onClick={handleSubmit} className="w-full bg-rysys-green-power text-white h-12 rounded-none font-black uppercase shadow-brutal hover:shadow-brutal-gold transition-all mt-4">
+          <Button onClick={handleSubmit} className="w-full bg-rysys-green-power text-white h-14 rounded-none font-black uppercase shadow-brutal hover:shadow-brutal-gold transition-all mt-4">
             Deploy Proposal
           </Button>
         </div>
@@ -212,14 +370,18 @@ function MessageComposer({ onSent }: { onSent: () => void }) {
   const [text, setText] = useState('');
   const handleSend = async () => {
     if (!text.trim()) return;
-    const res = await fetch('/api/forust/messages', {
-      method: 'POST',
-      headers: authHeader(),
-      body: JSON.stringify({ toEmail: 'support', text })
-    });
-    if (res.ok) {
-      setText('');
-      onSent();
+    try {
+      const res = await fetch('/api/forust/messages', {
+        method: 'POST',
+        headers: authHeader(),
+        body: JSON.stringify({ toEmail: 'support', text })
+      });
+      if (res.ok) {
+        setText('');
+        onSent();
+      }
+    } catch {
+      toast.error('Transmission failed');
     }
   };
   return (
