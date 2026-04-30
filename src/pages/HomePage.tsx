@@ -20,7 +20,7 @@ const NAVBAR_LINKS = [
   { name: 'Contact', href: '/contact' },
   { name: 'forUSt', href: '/forust', isCta: true },
 ];
-const TRUST_AFFILIATIONS = ['IEEE', 'ANSI', 'OSHA', 'NEMA'];
+const TRUST_AFFILIATIONS = ['PSU', 'IEEE', 'NCEES', 'Grants.gov'];
 export function HomePage() {
   return (
     <div className="min-h-screen bg-rysys-cream text-rysys-black selection:bg-rysys-gold selection:text-white font-sans scroll-smooth">
@@ -82,8 +82,7 @@ export function HomePage() {
                 at Scale.
               </h1>
               <p className="mt-4 text-xl md:text-2xl font-medium leading-loose max-w-2xl text-muted-foreground border-l-4 border-rysys-gold pl-8 md:pl-10 bg-rysys-cream/80 backdrop-blur-sm md:bg-transparent">
-                RYSYS bridges the gap between massive-scale electrical infrastructure and next-generation AI automation.
-                Engineering the foundation for the silicon century.
+                RYSYS bridges the gap between massive-scale electrical infrastructure and next-generation AI automation. Engineering the foundation for the silicon century.
               </p>
             </div>
             <div className="lg:col-span-5 relative">
@@ -119,7 +118,10 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-center md:justify-between items-center gap-16">
             {TRUST_AFFILIATIONS.map((name) => (
-              <span key={name} className="text-white text-3xl md:text-5xl font-black tracking-[0.2em] uppercase opacity-80 hover:text-rysys-gold hover:opacity-100 transition-all cursor-default">
+              <span 
+                key={name} 
+                className="text-white text-3xl md:text-5xl font-black tracking-widest uppercase opacity-80 hover:text-rysys-gold hover:opacity-100 transition-all cursor-default"
+              >
                 {name}
               </span>
             ))}

@@ -14,7 +14,7 @@ const regSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8, "Security threshold: 8 chars"),
   confirm: z.string(),
-  terms: z.literal(true, { errorMap: () => ({ message: "Must accept protocols" }) }),
+  terms: z.literal(true, { message: "Must accept protocols" }),
 }).refine(data => data.password === data.confirm, {
   message: "Parity error: Passwords mismatch",
   path: ["confirm"],
@@ -107,7 +107,11 @@ export function RegisterPage() {
                 render={({ field }) => (
                   <FormItem className="flex items-center space-x-2 space-y-0 pt-2">
                     <FormControl>
-                      <Checkbox checked={field.value} onCheckedChange={field.onChange} className="border-2 border-rysys-black rounded-none data-[state=checked]:bg-rysys-gold" />
+                      <Checkbox 
+                        checked={field.value} 
+                        onCheckedChange={(checked) => field.onChange(checked === true)} 
+                        className="border-2 border-rysys-black rounded-none data-[state=checked]:bg-rysys-gold" 
+                      />
                     </FormControl>
                     <FormLabel className="text-[10px] font-bold uppercase tracking-tight">Accept Infrastructure Protocols</FormLabel>
                   </FormItem>
