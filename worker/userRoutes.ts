@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { Env } from './core-utils';
-import type { DemoItem, ApiResponse, AuthTokenPayload, UserPublic, Message } from '@shared/types';
+import type { DemoItem, ApiResponse, AuthTokenPayload, UserPublic, Message, Doc } from '@shared/types';
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
     const protectedMiddleware = async (c: any, next: any) => {
         const authHeader = c.req.header('Authorization');
@@ -55,6 +55,15 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
         const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
         const updated = await stub.addDocVersion(user.uid, docId, content);
         return c.json({ success: true, data: updated });
+    });
+    app.put('/api/forust/docs/:id/sharing', protectedMiddleware, async (c) => {
+        const user = (c as any).get('user') as AuthTokenPayload;
+        const docId = c.req.param('id');
+        const { shareWith } = await c.req.json();
+        const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
+        const updated = await stub.updateDocSharing(user.uid, docId, shareWith);
+        if (!updated) return c.json({ success: false, error: 'Forbidden or Not Found' }, 403);
+        return c.json({ success: true, data: updated } satisfies ApiResponse<Doc>);
     });
     app.get('/api/forust/docs/:id/comments', protectedMiddleware, async (c) => {
         const docId = c.req.param('id');

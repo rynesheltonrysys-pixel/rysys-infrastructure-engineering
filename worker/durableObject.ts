@@ -88,6 +88,24 @@ export class GlobalDurableObject extends DurableObject {
         await this.ctx.storage.put(this.DOCS_KEY, docs);
         return doc;
     }
+    async updateDocSharing(uid: string, docId: string, shareWithEmails: string[]): Promise<Doc | null> {
+        const docs = (await this.ctx.storage.get<Doc[]>(this.DOCS_KEY)) || [];
+        const idx = docs.findIndex(d => d.id === docId);
+        if (idx === -1) return null;
+        const doc = docs[idx];
+        // Owner Check
+        if (doc.ownerId !== uid) return null;
+        // Normalize emails
+        const normalized = Array.from(new Set(
+            shareWithEmails
+                .map(e => e.trim().toLowerCase())
+                .filter(Boolean)
+        ));
+        doc.sharedWith = normalized;
+        doc.updatedAt = new Date().toISOString();
+        await this.ctx.storage.put(this.DOCS_KEY, docs);
+        return doc;
+    }
     async getComments(docId: string): Promise<Comment[]> {
         const all = (await this.ctx.storage.get<Comment[]>(this.COMMENTS_KEY)) || [];
         return all.filter(c => c.docId === docId);
@@ -107,7 +125,6 @@ export class GlobalDurableObject extends DurableObject {
         const email = users[uid]?.email;
         let filtered: Message[];
         if (peerId || peerEmail) {
-            // Private DM thread between current user and specified peer
             filtered = all.filter(m => {
                 const isFromMe = m.fromId === uid;
                 const isFromPeer = (peerId && m.fromId === peerId) || (peerEmail && m.fromEmail === peerEmail);
@@ -116,7 +133,6 @@ export class GlobalDurableObject extends DurableObject {
                 return (isFromMe && isToPeer) || (isFromPeer && isToMe);
             });
         } else {
-            // Legacy / Shared feed logic
             filtered = all.filter(m => m.fromId === uid || (email && m.toEmail === email) || m.toEmail === 'support');
         }
         return filtered.sort((a, b) => a.createdAt.localeCompare(b.createdAt));

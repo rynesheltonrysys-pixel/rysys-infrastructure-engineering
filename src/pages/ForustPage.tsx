@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-  FileText, Plus, LogOut, Send, History, MessageSquare, Loader2, Search, User as UserIcon, RefreshCw
+  FileText, Plus, LogOut, Send, History, MessageSquare, Loader2, Search, User as UserIcon, RefreshCw, Users, Save
 } from 'lucide-react';
 import { isAuthed, authHeader, clearAuth, getUser } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
@@ -76,20 +76,23 @@ export function ForustPage() {
   }, [navigate, fetchData]);
   // Focus-based refresh
   useEffect(() => {
-    const handleFocus = () => {
+    const handleActivity = () => {
       if (activeTab === 'shared') {
         fetchData();
       } else if (activeTab === 'direct' && peer) {
         fetchDmMessages(peer.id);
       }
     };
-    window.addEventListener('focus', handleFocus);
-    window.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') handleFocus();
-    });
+
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') handleActivity();
+    };
+
+    window.addEventListener('focus', handleActivity);
+    window.addEventListener('visibilitychange', handleVisibility);
     return () => {
-      window.removeEventListener('focus', handleFocus);
-      window.removeEventListener('visibilitychange', handleFocus);
+      window.removeEventListener('focus', handleActivity);
+      window.removeEventListener('visibilitychange', handleVisibility);
     };
   }, [activeTab, peer, fetchData, fetchDmMessages]);
   const handleLogout = () => {
@@ -271,6 +274,11 @@ function DocViewer({ doc: initialDoc }: { doc: Doc }) {
   const [isPostingComment, setIsPostingComment] = useState(false);
   const [newVersionContent, setNewVersionContent] = useState('');
   const [isCommitting, setIsCommitting] = useState(false);
+  
+  const user = getUser();
+  const [shareInput, setShareInput] = useState(doc.sharedWith.join(', '));
+  const [isSavingSharing, setIsSavingSharing] = useState(false);
+
   const fetchComments = useCallback(async () => {
     setCommentsLoading(true);
     try {
@@ -329,6 +337,30 @@ function DocViewer({ doc: initialDoc }: { doc: Doc }) {
       setIsCommitting(false);
     }
   };
+  const handleUpdateSharing = async () => {
+    setIsSavingSharing(true);
+    const shareWith = shareInput.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+    try {
+      const res = await fetch(`/api/forust/docs/${doc.id}/sharing`, {
+        method: 'PUT',
+        headers: authHeader(),
+        body: JSON.stringify({ shareWith })
+      });
+      const json = await res.json();
+      if (json.success) {
+        setDoc(json.data);
+        setShareInput(json.data.sharedWith.join(', '));
+        toast.success('Sharing protocols updated');
+      } else {
+        toast.error(json.error || 'Failed to update sharing');
+      }
+    } catch {
+      toast.error('Network failure');
+    } finally {
+      setIsSavingSharing(false);
+    }
+  };
+
   const currentVersion = doc.versions.find(v => v.version === activeVer) || doc.versions[doc.versions.length - 1];
   const verComments = comments.filter(c => c.version === activeVer);
   return (
@@ -354,6 +386,39 @@ function DocViewer({ doc: initialDoc }: { doc: Doc }) {
         </div>
       </div>
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        {doc.ownerId === user?.id && (
+          <div className="p-6 bg-white border-b-4 border-rysys-black shrink-0">
+             <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-2">
+                   <Users className="w-4 h-4 text-rysys-gold" />
+                   <h3 className="text-xs font-black uppercase tracking-widest">Share Management</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                   {doc.sharedWith.map(email => (
+                     <Badge key={email} className="bg-rysys-grey text-rysys-black border-2 border-rysys-black rounded-none text-[8px] font-mono lowercase">
+                        {email}
+                     </Badge>
+                   ))}
+                   {doc.sharedWith.length === 0 && <span className="text-[10px] font-bold opacity-30 uppercase">Private Access Only</span>}
+                </div>
+                <div className="flex gap-2">
+                   <Input 
+                     value={shareInput}
+                     onChange={e => setShareInput(e.target.value)}
+                     placeholder="OPERATOR EMAILS (COMMA SEPARATED)..."
+                     className="border-2 border-rysys-black rounded-none bg-rysys-cream font-bold text-xs h-10"
+                   />
+                   <Button 
+                     onClick={handleUpdateSharing}
+                     disabled={isSavingSharing}
+                     className="bg-rysys-black text-white rounded-none px-4 h-10 shadow-brutal hover:shadow-brutal-gold transition-all"
+                   >
+                      {isSavingSharing ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
+                   </Button>
+                </div>
+             </div>
+          </div>
+        )}
         <div className="flex-1 overflow-y-auto p-8 font-mono text-sm leading-relaxed bg-white/40 border-b-4 lg:border-b-0 lg:border-r-4 border-rysys-black">
           <pre className="whitespace-pre-wrap">{currentVersion.content}</pre>
           <div className="mt-12 pt-8 border-t-4 border-rysys-black">
