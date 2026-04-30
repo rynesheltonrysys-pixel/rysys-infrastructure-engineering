@@ -14,6 +14,9 @@ import '@/index.css'
 import { HomePage } from '@/pages/HomePage'
 import { AboutPage } from '@/pages/AboutPage'
 import { ContactPage } from '@/pages/ContactPage'
+import { SigninPage } from '@/pages/SigninPage'
+import { RegisterPage } from '@/pages/RegisterPage'
+import { ForustPage } from '@/pages/ForustPage'
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -29,6 +32,21 @@ const router = createBrowserRouter([
   {
     path: "/contact",
     element: <ContactPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/signin",
+    element: <SigninPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/forust",
+    element: <ForustPage />,
     errorElement: <RouteErrorBoundary />,
   },
 ]);

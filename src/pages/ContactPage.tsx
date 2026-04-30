@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact', active: true },
-  { name: 'forUST', href: '/#portal', isCta: true },
+  { name: 'forUST', href: '/forust', isCta: true },
 ];
 const contactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),

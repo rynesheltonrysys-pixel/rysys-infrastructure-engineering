@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { setToken as saveToken, setUser as saveUser } from '@/lib/auth';
+import { setToken, setUser } from '@/lib/auth';
 import { toast } from 'sonner';
 const signinSchema = z.object({
   email: z.string().email(),
@@ -28,9 +28,9 @@ export function SigninPage() {
       });
       const json = await res.json();
       if (json.success) {
-        saveToken(json.data.token);
-        saveUser(json.data.user);
-        toast.success('Welcome back to the RYSYS community.');
+        setToken(json.data.token);
+        setUser(json.data.user);
+        toast.success('Welcome back to RYSYS.');
         navigate('/forust');
       } else {
         toast.error(json.error || 'Login failed');
@@ -42,18 +42,17 @@ export function SigninPage() {
   return (
     <div className="min-h-screen bg-rysys-cream flex flex-col">
       <nav className="h-20 border-b-4 border-rysys-black flex items-center px-8 bg-white">
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex flex-col items-center justify-center shadow-brutal group-hover:translate-x-[1px] group-hover:translate-y-[1px] transition-all leading-none overflow-hidden">
-            <span className="text-white font-black text-[10px]">RY</span>
-            <span className="text-white font-black text-[10px]">SYS</span>
+        <Link to="/" className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-rysys-gold border-2 border-rysys-black flex items-center justify-center">
+            <span className="text-white font-black">R</span>
           </div>
-          <span className="font-black text-xl uppercase tracking-tighter">RYSYS</span>
+          <span className="font-black text-xl">RYSYS</span>
         </Link>
       </nav>
       <main className="flex-1 flex items-center justify-center p-6">
         <Card className="w-full max-w-md p-8 border-4 border-rysys-black shadow-brutal-lg bg-white rounded-none">
-          <h1 className="text-4xl font-black uppercase mb-2 tracking-tighter">Login</h1>
-          <p className="text-muted-foreground font-bold uppercase text-[10px] mb-8 tracking-[0.1em]">Access the for-US-t Community Portal</p>
+          <h1 className="text-4xl font-black uppercase mb-2">Login</h1>
+          <p className="text-muted-foreground font-bold uppercase text-xs mb-8">Access the forUST Infrastructure Portal</p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
@@ -61,9 +60,9 @@ export function SigninPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-black uppercase text-xs tracking-widest">Email</FormLabel>
+                    <FormLabel className="font-black uppercase text-xs">Email</FormLabel>
                     <FormControl>
-                      <Input {...field} className="border-2 border-rysys-black bg-rysys-cream rounded-none font-bold" />
+                      <Input {...field} className="border-2 border-rysys-black bg-rysys-cream rounded-none" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -74,21 +73,21 @@ export function SigninPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-black uppercase text-xs tracking-widest">Password</FormLabel>
+                    <FormLabel className="font-black uppercase text-xs">Password</FormLabel>
                     <FormControl>
-                      <Input type="password" {...field} className="border-2 border-rysys-black bg-rysys-cream rounded-none font-bold" />
+                      <Input type="password" {...field} className="border-2 border-rysys-black bg-rysys-cream rounded-none" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full bg-rysys-black text-white h-12 rounded-none font-black uppercase shadow-brutal hover:shadow-brutal-gold transition-all mt-4">
+              <Button type="submit" className="w-full bg-rysys-black text-white h-12 rounded-none font-black uppercase shadow-brutal hover:shadow-brutal-gold transition-all">
                 Authorize Session
               </Button>
             </form>
           </Form>
-          <div className="mt-8 pt-6 border-t-2 border-rysys-grey flex justify-between text-[10px] font-black uppercase tracking-widest">
-            <Link to="/register" className="hover:text-rysys-gold transition-colors">New Node? Register</Link>
+          <div className="mt-8 pt-6 border-t-2 border-rysys-grey flex justify-between text-[10px] font-black uppercase">
+            <Link to="/register" className="hover:text-rysys-gold">New Node? Register</Link>
             <span className="text-muted-foreground cursor-not-allowed">Reset Key</span>
           </div>
         </Card>

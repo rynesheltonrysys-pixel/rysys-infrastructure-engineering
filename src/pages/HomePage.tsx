@@ -18,7 +18,7 @@ const NAVBAR_LINKS = [
   { name: 'Leadership', href: '#leadership', isAnchor: true },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
-  { name: 'forUST', href: '#portal', isCta: true, isAnchor: true },
+  { name: 'forUST', href: '/forust', isCta: true },
 ];
 const TRUST_AFFILIATIONS = ['IEEE', 'ANSI', 'OSHA', 'NEMA'];
 export function HomePage() {
@@ -36,11 +36,11 @@ export function HomePage() {
           <div className="hidden lg:flex items-center gap-8">
             {NAVBAR_LINKS.map((link) => (
               link.isCta ? (
-                <a key={link.name} href={link.href} className="inline-block">
+                <Link key={link.name} to={link.href} className="inline-block">
                   <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-bold uppercase py-6 px-8 h-auto">
                     {link.name}
                   </Button>
-                </a>
+                </Link>
               ) : (
                 link.isAnchor ? (
                   <a
@@ -90,23 +90,29 @@ export function HomePage() {
                 Engineering the foundation for the silicon century.
               </p>
             </div>
+            {/* Updated Hero Right Column */}
             <div className="lg:col-span-5 relative">
-              <div className="aspect-square bg-rysys-green-power border-4 border-rysys-black shadow-brutal-lg flex items-center justify-center p-8 overflow-hidden relative group">
-                <Cpu className="w-full h-full text-white/20 absolute rotate-12 group-hover:rotate-45 transition-transform duration-700" />
-                <div className="bg-white p-6 border-4 border-rysys-black shadow-brutal z-10 space-y-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-                    <span className="font-mono text-xs font-bold uppercase tracking-tighter">System Health: Nominal</span>
-                  </div>
-                  <div className="space-y-1 font-mono text-sm">
-                    <p className="text-rysys-gold font-bold">GRID_LINK: ACTIVE</p>
-                    <p>PWR_LOAD: 4.8 GW</p>
-                    <p>AI_SYNC: 99.99%</p>
+              <div className="aspect-square border-4 border-rysys-black shadow-brutal-lg overflow-hidden relative group bg-rysys-cream">
+                <img 
+                  src="https://images.unsplash.com/photo-1541457523724-95f54f7740cc?auto=format&fit=crop&q=80&w=800&h=800" 
+                  alt="Infrastructure" 
+                  className="absolute inset-0 w-full h-full object-cover grayscale opacity-40 group-hover:scale-110 transition-transform duration-700"
+                />
+                {/* Logo Tile Overlay */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-48 h-48 bg-rysys-gold border-4 border-rysys-black shadow-brutal flex flex-col items-center justify-center gap-2 group-hover:rotate-3 transition-transform">
+                    <span className="text-white font-black text-8xl leading-none">R</span>
+                    <span className="text-rysys-black font-black uppercase tracking-[0.2em] text-sm">RYSYS</span>
                   </div>
                 </div>
+                {/* Simplified Status Chip */}
+                <div className="absolute bottom-6 left-6 bg-white border-3 border-rysys-black px-4 py-2 shadow-brutal flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                  <span className="font-mono text-[10px] font-black uppercase tracking-tighter">GRID_LINK: ACTIVE</span>
+                </div>
               </div>
-              <div className="absolute -bottom-6 -left-6 bg-rysys-gold border-4 border-rysys-black px-6 py-4 shadow-brutal z-20">
-                <span className="font-black italic text-xl uppercase">Safety First.</span>
+              <div className="absolute -bottom-6 -right-6 bg-rysys-green-power border-4 border-rysys-black px-6 py-4 shadow-brutal z-20 text-white">
+                <span className="font-black italic text-xl uppercase tracking-widest">PORTLAND_OR</span>
               </div>
             </div>
           </div>
@@ -207,9 +213,11 @@ export function HomePage() {
             Access our open-source infrastructure tools, engineering standards, and technical whitepapers.
           </p>
           <div className="flex justify-center mt-4">
-            <Button className="bg-white text-rysys-black border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:text-rysys-gold hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-black uppercase py-8 px-12 text-xl h-auto group">
-              Join forUST <Terminal className="ml-2 group-hover:text-rysys-gold transition-colors" />
-            </Button>
+            <Link to="/forust">
+              <Button className="bg-white text-rysys-black border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:text-rysys-gold hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-black uppercase py-8 px-12 text-xl h-auto group">
+                Enter Portal <Terminal className="ml-2 group-hover:text-rysys-gold transition-colors" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -234,7 +242,7 @@ export function HomePage() {
                 <Link to="/" className="hover:text-rysys-gold transition-colors">Home</Link>
                 <Link to="/about" className="hover:text-rysys-gold transition-colors">About RYSYS</Link>
                 <Link to="/contact" className="hover:text-rysys-gold transition-colors">Contact</Link>
-                <a href="#portal" className="hover:text-rysys-gold transition-colors">forUST</a>
+                <Link to="/forust" className="hover:text-rysys-gold transition-colors">forUST</Link>
               </div>
             </div>
             <div>
@@ -248,8 +256,6 @@ export function HomePage() {
                   <Mail className="w-4 h-4 text-rysys-gold" />
                   <span>support@rysys.org</span>
                 </a>
-                <span className="hover:text-rysys-gold cursor-pointer transition-colors">LinkedIn</span>
-                <span className="hover:text-rysys-gold cursor-pointer transition-colors">Twitter (X)</span>
               </div>
             </div>
           </div>
@@ -257,10 +263,6 @@ export function HomePage() {
             <span className="font-mono text-xs font-bold text-muted-foreground uppercase">
               © 2025 RYSYS Infrastructure & Engineering. All rights reserved.
             </span>
-            <div className="flex gap-6 font-mono text-xs font-bold uppercase text-muted-foreground">
-              <span className="hover:text-rysys-gold cursor-pointer">Privacy Policy</span>
-              <span className="hover:text-rysys-gold cursor-pointer">Terms of Service</span>
-            </div>
           </div>
         </div>
       </footer>

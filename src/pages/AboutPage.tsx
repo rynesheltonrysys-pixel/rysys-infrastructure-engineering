@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about', active: true },
   { name: 'Contact', href: '/contact' },
-  { name: 'forUST', href: '/#portal', isCta: true },
+  { name: 'forUST', href: '/forust', isCta: true },
 ];
 export function AboutPage() {
   return (
