@@ -6,14 +6,14 @@ export default {
   	extend: {
   		fontFamily: {
   			sans: [
+  				'Zilla Slab',
   				'Inter',
   				'-apple-system',
-  				'BlinkMacSystemFont',
-  				'Segoe UI',
-  				'Roboto',
   				'sans-serif'
   			],
 			display: [
+				'Oswald',
+				'Zilla Slab',
 				'Inter',
 				'system-ui',
 				'sans-serif'
@@ -83,6 +83,9 @@ export default {
         'brutal-green-lg': '10px 10px 0px #00583F',
         'brutal-gold': '4px 4px 0px #FFD100',
         'brutal-gold-lg': '10px 10px 0px #FFD100',
+        'brutal-gold-2': '4px 4px 0 #FFD100, 8px 8px 0 #121212',
+        'brutal-gold-triple': '4px 4px 0 #FFD100, 8px 8px 0 #121212, 12px 12px 0 #FFD100',
+        'brutal-faceted': 'inset 0 0 0 3px #121212, inset 0 0 0 6px #FFD100',
   			'brutal-hover': '2px 2px 0px #121212',
         'brutal-gold-hover': '2px 2px 0px #FFD100'
   		},

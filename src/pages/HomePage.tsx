@@ -36,7 +36,7 @@ export function HomePage() {
           <img
             src="https://images.unsplash.com/photo-1541457523724-95f54f7740cc?auto=format&fit=crop&q=80&w=1600"
             alt="Portland Skyline"
-            className="w-full h-full object-cover object-center grayscale contrast-125 opacity-15"
+            className="w-full h-full object-cover object-center grayscale contrast-125 opacity-20"
           />
           <div className="absolute inset-0 bg-rysys-black/5 mix-blend-multiply" />
         </div>
@@ -46,7 +46,7 @@ export function HomePage() {
               <Badge className="bg-white text-rysys-black border-4 border-rysys-black rounded-none px-6 py-2 font-mono uppercase font-black text-xs shadow-brutal-gold-lg">
                 Established 2025 // <span className="text-rysys-gold">v1.2.0</span>
               </Badge>
-              <h1 className="text-7xl md:text-[9rem] font-black leading-[0.85] tracking-tighter uppercase break-words">
+              <h1 className="text-7xl md:text-[9rem] font-display font-black leading-[0.85] tracking-tight uppercase break-words">
                 ELITE <br />
                 <span className="text-rysys-black">ENG.</span> <br />
                 <span className="normal-case bg-gradient-to-br from-rysys-gold to-rysys-green-power bg-clip-text text-transparent">
@@ -65,7 +65,7 @@ export function HomePage() {
                   className="absolute inset-0 w-full h-full object-cover grayscale opacity-30 group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-56 h-56 bg-rysys-gold border-4 border-rysys-black shadow-brutal-lg flex flex-col items-center justify-center gap-2 group-hover:rotate-1 transition-transform">
+                  <div className="w-56 h-56 bg-rysys-gold faceted-gold shadow-brutal-gold-triple ring-2 ring-rysys-gold ring-offset-2 ring-offset-white flex flex-col items-center justify-center gap-2 group-hover:rotate-1 transition-transform">
                     <div className="flex flex-col items-center leading-none">
                       <span className="text-white font-black text-7xl">RY</span>
                       <span className="text-white font-black text-7xl">SYS</span>
@@ -103,10 +103,11 @@ export function HomePage() {
       {/* Capabilities Grid */}
       <section id="capabilities" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
         <div className="mb-20">
-          <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">
+          <h2 className="text-4xl md:text-6xl font-display font-black uppercase tracking-tight mb-4">
             Proven <span className="text-rysys-gold">Capabilities</span>
           </h2>
           <div className="h-3 w-40 bg-rysys-black" />
+          <div className="filigree-gold w-40 mt-1" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
           <CapabilityCard
@@ -132,7 +133,7 @@ export function HomePage() {
       {/* Leadership Profile */}
       <section id="leadership" className="bg-rysys-grey py-20 md:py-28 border-y-4 border-rysys-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white border-4 border-rysys-black shadow-brutal-lg p-8 md:p-14 overflow-hidden relative">
+          <div className="bg-white faceted-gold shadow-brutal-lg p-8 md:p-14 overflow-hidden relative">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-4">
                 <div className="aspect-[4/5] bg-rysys-grey border-4 border-rysys-black shadow-brutal-blue-lg relative p-6 flex items-center justify-center overflow-hidden group cursor-pointer hover:bg-white transition-colors duration-300">
@@ -148,7 +149,7 @@ export function HomePage() {
               </div>
               <div className="lg:col-span-8 space-y-8">
                 <div className="space-y-4">
-                  <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">Director of Engineering</h3>
+                  <h3 className="text-4xl md:text-5xl font-display font-black uppercase tracking-tight">Director of Engineering</h3>
                   <div className="flex flex-wrap gap-4 items-center">
                     <span className="text-lg font-black text-rysys-gold uppercase tracking-widest font-mono border-2 border-rysys-gold px-3 py-1">GPA 4.0</span>
                     <span className="text-lg font-black text-rysys-blue-power uppercase tracking-widest font-mono border-2 border-rysys-blue-power px-3 py-1">Senior EE Lead</span>
@@ -179,7 +180,7 @@ export function HomePage() {
       <section id="portal" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
         <div className="bg-rysys-green-power border-4 border-rysys-black p-12 md:p-20 text-center shadow-brutal-gold-lg relative overflow-hidden">
           <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rotate-45 translate-x-20 -translate-y-20" />
-          <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-[0.1em] mb-8 flex items-center justify-center gap-6">
+          <h2 className="text-4xl md:text-7xl font-display font-black text-white uppercase tracking-tight mb-8 flex items-center justify-center gap-6">
             <Trees className="w-10 h-10 md:w-16 md:h-16 text-rysys-gold" />
             <span>Join for-US-t</span>
             <Trees className="w-10 h-10 md:w-16 md:h-16 text-rysys-gold" />
@@ -189,7 +190,7 @@ export function HomePage() {
           </p>
           <div className="flex justify-center mt-4">
             <Link to="/forust">
-              <Button className="bg-white text-rysys-black border-4 border-rysys-black shadow-brutal-gold-lg hover:shadow-brutal-gold-hover hover:text-rysys-gold hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-10 px-16 text-2xl h-auto group flex items-center gap-4">
+              <Button className="bg-white text-rysys-black border-4 border-rysys-black shadow-brutal-gold-triple hover:shadow-brutal-gold-hover hover:text-rysys-gold hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-10 px-16 text-2xl h-auto group flex items-center gap-4">
                 <Trees className="w-8 h-8 text-rysys-green-power" />
                 <span className="font-black uppercase tracking-[0.1em]">Enter Portal</span>
                 <Trees className="w-8 h-8 text-rysys-green-power" />
@@ -209,11 +210,11 @@ function CapabilityCard({ icon, title, description, tags }: {
   tags: string[];
 }) {
   return (
-    <Card className="bg-white border-4 border-rysys-black rounded-none p-10 lg:p-12 shadow-brutal hover:shadow-brutal-blue hover:border-rysys-blue-power transition-all duration-300 group">
+    <Card className="bg-white border-4 border-rysys-black rounded-none p-10 lg:p-12 shadow-brutal hover:shadow-brutal-gold-2 hover:faceted-gold transition-all duration-300 group">
       <div className="w-16 h-16 bg-rysys-grey border-4 border-rysys-black flex items-center justify-center mb-8 group-hover:bg-rysys-blue-power group-hover:text-white transition-colors">
         {icon}
       </div>
-      <h3 className="text-2xl font-black uppercase tracking-tighter mb-4 group-hover:text-rysys-blue-power transition-colors">{title}</h3>
+      <h3 className="text-2xl font-display font-black uppercase tracking-tight mb-4 group-hover:text-rysys-blue-power transition-colors">{title}</h3>
       <p className="font-bold text-muted-foreground mb-8 leading-relaxed">
         {description}
       </p>

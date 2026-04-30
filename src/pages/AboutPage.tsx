@@ -32,16 +32,16 @@ export function AboutPage() {
           <Badge className="bg-white text-rysys-black border-4 border-rysys-black rounded-none px-6 py-2 font-mono uppercase font-black text-sm shadow-brutal-gold mb-8">
             Established 2025 // Core Infrastructure
           </Badge>
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase leading-[0.9] tracking-tighter mb-8">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-black uppercase leading-[0.9] tracking-tight mb-8">
             The RYSYS <br />
             <span className="text-rysys-green-power">Blueprint.</span>
           </h1>
-          <p className="text-xl md:text-3xl font-black leading-tight max-w-3xl text-muted-foreground border-l-8 border-rysys-gold pl-8 md:pl-12 py-4">
+          <p className="text-xl md:text-3xl font-sans font-black leading-tight max-w-3xl text-muted-foreground border-l-8 border-rysys-gold pl-8 md:pl-12 py-4">
             We don't just build systems; we engineer the physical reality that makes artificial intelligence possible.
           </p>
         </section>
         {/* Leadership Bio */}
-        <section className="bg-white border-4 border-rysys-black shadow-brutal-lg p-8 md:p-14 mb-24 overflow-hidden relative">
+        <section className="bg-white faceted-gold shadow-brutal-lg p-8 md:p-14 mb-24 overflow-hidden relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-4">
               <div className="aspect-[4/5] bg-rysys-grey border-4 border-rysys-black shadow-brutal-blue relative p-6 flex items-center justify-center overflow-hidden group cursor-pointer hover:bg-white transition-colors duration-300">
@@ -57,7 +57,7 @@ export function AboutPage() {
             </div>
             <div className="lg:col-span-8 space-y-8">
               <div className="space-y-4">
-                <h3 className="text-4xl font-black uppercase tracking-tighter">Engineering Leadership</h3>
+                <h3 className="text-4xl font-display font-black uppercase tracking-tight">Engineering Leadership</h3>
                 <div className="flex flex-wrap gap-4 items-center">
                   <span className="text-sm font-black text-rysys-gold uppercase tracking-widest font-mono border-2 border-rysys-gold px-3 py-1">GPA 4.0 Graduate</span>
                   <span className="text-sm font-black text-rysys-blue-power uppercase tracking-widest font-mono border-2 border-rysys-blue-power px-3 py-1">Senior EE Lead</span>
@@ -85,7 +85,7 @@ export function AboutPage() {
         {/* Rest of page kept as-is */}
         <section className="mb-24">
           <div className="mb-12">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-4">Core <span className="text-rysys-gold">DNA</span></h2>
+            <h2 className="text-3xl md:text-5xl font-display font-black uppercase tracking-tight mb-4">Core <span className="text-rysys-gold">DNA</span></h2>
             <div className="h-3 w-32 bg-rysys-black" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -111,10 +111,11 @@ export function AboutPage() {
         </section>
         <section id="business-plan" className="mb-24">
           <div className="mb-12">
-            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">
+            <h2 className="text-4xl md:text-6xl font-display font-black uppercase tracking-tight mb-4">
               Business <span className="text-rysys-gold">Plan</span>
             </h2>
             <div className="h-3 w-40 bg-rysys-gold mb-6" />
+            <div className="filigree-gold w-40 -mt-5" />
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <Card className="bg-white border-4 border-rysys-black rounded-none p-8 shadow-brutal hover:shadow-brutal-gold transition-all group flex flex-col h-full">

@@ -38,7 +38,7 @@ export function ContactPage() {
           <Badge className="bg-white text-rysys-black border-2 border-rysys-gold rounded-none px-4 py-1 font-mono uppercase font-bold text-sm shadow-brutal-gold mb-8">
             Response Status: WITHIN 48H
           </Badge>
-          <h1 className="text-5xl md:text-7xl font-black uppercase leading-[0.9] tracking-tighter mb-6">
+          <h1 className="text-5xl md:text-7xl font-display font-black uppercase leading-[0.9] tracking-tight mb-6">
             Get In <span className="text-rysys-green-power">Contact.</span>
           </h1>
           <p className="text-xl font-medium text-muted-foreground max-w-2xl">
@@ -47,7 +47,7 @@ export function ContactPage() {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           <div className="space-y-10">
-            <Card className="bg-white border-4 border-rysys-black p-8 md:p-12 shadow-brutal hover:shadow-brutal-gold transition-all duration-500 group relative overflow-hidden">
+            <Card className="bg-white faceted-gold p-8 md:p-12 shadow-brutal hover:shadow-brutal-gold transition-all duration-500 group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-rysys-gold/10 -rotate-45 translate-x-12 -translate-y-12" />
               <div className="flex flex-col gap-10 relative z-10">
                 <div className="flex items-center gap-4">
@@ -125,7 +125,7 @@ export function ContactPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" disabled={!form.formState.isValid} className="w-full bg-rysys-black text-white hover:bg-rysys-green-power hover:shadow-brutal-gold transition-all rounded-none h-14 font-black uppercase tracking-widest text-lg border-2 border-rysys-black disabled:opacity-30 group">
+                <Button type="submit" disabled={!form.formState.isValid} className="w-full bg-rysys-black text-white hover:bg-rysys-green-power hover:shadow-brutal-gold-triple transition-all rounded-none h-14 font-black uppercase tracking-widest text-lg border-2 border-rysys-black disabled:opacity-30 group">
                   Send Proposal <Send className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </form>
