@@ -35,10 +35,10 @@ export function HomePage() {
             <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
           </div>
           <div className="hidden lg:flex items-center gap-8">
-            {NAVBAR_LINKS.map((link) => (
+            {NAV_LINKS.map((link) => (
               link.isCta ? (
                 <a key={link.name} href={link.href} className="inline-block">
-                  <Button className="bg-rysys-blue text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-bold uppercase py-6 px-8 h-auto">
+                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-bold uppercase py-6 px-8 h-auto">
                     {link.name}
                   </Button>
                 </a>
@@ -73,17 +73,17 @@ export function HomePage() {
             alt="Portland Skyline"
             className="w-full h-full object-cover object-center grayscale contrast-125 opacity-20"
           />
-          <div className="absolute inset-0 bg-rysys-blue/10 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-rysys-green-power/10 mix-blend-multiply" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-28 lg:py-32 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7 space-y-10 md:space-y-12">
               <Badge className="bg-white text-rysys-black border-2 border-rysys-gold rounded-none px-4 py-1 font-mono uppercase font-bold text-sm shadow-brutal-gold">
-                Established 2025 // <span className="text-rysys-gold">v1.1.0</span>
+                Established 2025 // <span className="text-rysys-gold">v1.2.0</span>
               </Badge>
               <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tighter uppercase">
                 Physical <br />
-                <span className="text-rysys-blue">Intelligence</span> <br />
+                <span className="text-rysys-green-power">Intelligence</span> <br />
                 at Scale.
               </h1>
               <p className="mt-4 text-xl md:text-2xl font-medium leading-loose max-w-2xl text-muted-foreground border-l-4 border-rysys-gold pl-8 md:pl-10 bg-rysys-cream/80 backdrop-blur-sm md:bg-transparent">
@@ -92,7 +92,7 @@ export function HomePage() {
               </p>
             </div>
             <div className="lg:col-span-5 relative">
-              <div className="aspect-square bg-rysys-blue border-4 border-rysys-black shadow-brutal-lg flex items-center justify-center p-8 overflow-hidden relative group">
+              <div className="aspect-square bg-rysys-green-power border-4 border-rysys-black shadow-brutal-lg flex items-center justify-center p-8 overflow-hidden relative group">
                 <Cpu className="w-full h-full text-white/20 absolute rotate-12 group-hover:rotate-45 transition-transform duration-700" />
                 <div className="bg-white p-6 border-4 border-rysys-black shadow-brutal z-10 space-y-4">
                   <div className="flex items-center gap-2">
@@ -106,7 +106,7 @@ export function HomePage() {
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -left-6 bg-yellow-400 border-4 border-rysys-gold px-6 py-4 shadow-brutal-gold z-20">
+              <div className="absolute -bottom-6 -left-6 bg-rysys-gold border-4 border-rysys-black px-6 py-4 shadow-brutal z-20">
                 <span className="font-black italic text-xl uppercase">Safety First.</span>
               </div>
             </div>
@@ -163,7 +163,6 @@ export function HomePage() {
                 <div className="aspect-[4/5] bg-rysys-grey border-4 border-rysys-black shadow-brutal relative p-6 flex items-center justify-center overflow-hidden group cursor-pointer hover:bg-white transition-colors duration-300">
                   <div
                     className="w-full h-full border-4 border-dashed border-rysys-gold/40 group-hover:border-rysys-gold flex flex-col items-center justify-center gap-4 text-center transition-colors"
-                    aria-label="Upload Leadership Portrait Placeholder"
                   >
                     <UploadCloud className="w-12 h-12 text-rysys-gold animate-bounce group-hover:scale-110 transition-transform" />
                     <span className="font-black text-xs uppercase tracking-widest text-rysys-gold px-4">
@@ -175,7 +174,7 @@ export function HomePage() {
               <div className="lg:col-span-8 space-y-8">
                 <div className="space-y-4">
                   <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">Director of Engineering</h3>
-                  <p className="text-xl font-bold text-rysys-gold uppercase tracking-widest font-mono">GPA 4.0 / Senior EE Lead</p>
+                  <p className="text-lg font-bold text-rysys-gold uppercase tracking-widest font-mono">GPA 4.0 / Senior EE Lead</p>
                 </div>
                 <p className="text-lg leading-relaxed font-medium">
                   With a background spanning core electrical engineering and advanced machine learning, our leadership ensures that RYSYS solutions aren't just theoretically sound—they're industrially hardened. We believe infrastructure should be as smart as the silicon it powers.
@@ -200,7 +199,7 @@ export function HomePage() {
       </section>
       {/* Community Portal CTA */}
       <section id="portal" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-28">
-        <div className="bg-rysys-blue border-4 border-rysys-black p-12 md:p-20 text-center shadow-brutal-gold-lg relative overflow-hidden">
+        <div className="bg-rysys-green-power border-4 border-rysys-black p-12 md:p-20 text-center shadow-brutal-gold-lg relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rotate-45 translate-x-16 -translate-y-16" />
           <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8">
             Join the RYSYS <br /> Community

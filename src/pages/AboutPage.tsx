@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  UploadCloud, 
-  CheckCircle2, 
-  QrCode, 
-  Code2, 
-  Globe 
+import {
+  UploadCloud,
+  CheckCircle2,
+  QrCode,
+  Code2,
+  Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -32,7 +32,7 @@ export function AboutPage() {
             {NAV_LINKS.map((link) => (
               link.isCta ? (
                 <a key={link.name} href={link.href} className="inline-block">
-                  <Button className="bg-rysys-blue text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-bold uppercase py-6 px-8 h-auto">
+                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-bold uppercase py-6 px-8 h-auto">
                     {link.name}
                   </Button>
                 </a>
@@ -57,7 +57,7 @@ export function AboutPage() {
           </Badge>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.9] tracking-tighter mb-8">
             The RYSYS <br />
-            <span className="text-rysys-blue">Blueprint.</span>
+            <span className="text-rysys-green-power">Blueprint.</span>
           </h1>
           <p className="text-xl md:text-2xl font-medium leading-loose max-w-3xl text-muted-foreground border-l-4 border-rysys-gold pl-8 md:pl-10">
             We don't just build systems; we engineer the physical reality that makes artificial intelligence possible. From high-voltage distribution to edge-embedded machine vision.
@@ -68,9 +68,8 @@ export function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-4">
               <div className="aspect-[4/5] bg-rysys-grey border-4 border-rysys-black shadow-brutal relative p-6 flex items-center justify-center overflow-hidden group cursor-pointer hover:bg-white transition-colors duration-300">
-                <div 
+                <div
                   className="w-full h-full border-4 border-dashed border-rysys-gold/40 group-hover:border-rysys-gold flex flex-col items-center justify-center gap-4 text-center transition-colors"
-                  aria-label="Upload Leadership Portrait Placeholder"
                 >
                   <UploadCloud className="w-12 h-12 text-rysys-gold animate-bounce group-hover:scale-110 transition-transform" />
                   <span className="font-black text-xs uppercase tracking-widest text-rysys-gold px-4">
@@ -110,19 +109,19 @@ export function AboutPage() {
             <div className="h-2 w-24 bg-rysys-black" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <CapabilitySummaryCard 
+            <CapabilitySummaryCard
               icon={<QrCode className="w-8 h-8" />}
               title="Perception"
               description="Hardened Machine Vision for edge infrastructure."
               tags={["CNN", "SoC"]}
             />
-            <CapabilitySummaryCard 
+            <CapabilitySummaryCard
               icon={<Code2 className="w-8 h-8" />}
               title="Intelligence"
               description="Predictive maintenance and Ops monitoring."
               tags={["AI Ops", "Edge"]}
             />
-            <CapabilitySummaryCard 
+            <CapabilitySummaryCard
               icon={<Globe className="w-8 h-8" />}
               title="Infrastructure"
               description="High-fidelity power grid and battery modeling."

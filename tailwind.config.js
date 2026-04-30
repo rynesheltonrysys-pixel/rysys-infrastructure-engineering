@@ -35,9 +35,10 @@ export default {
   			rysys: {
   				cream: '#fdfaf5',
   				grey: '#ececec',
-  				blue: '#1e40af',
+  				blue: '#1e40af', // Retained for compatibility
+          'green-power': '#00583F', // Portland Forest Green
   				black: '#121212',
-          gold: '#D4AF37'
+          gold: '#FFD100' // Portland Gold
   			},
   			muted: {
   				DEFAULT: 'hsl(var(--muted))',
@@ -75,10 +76,12 @@ export default {
   			brutal: '4px 4px 0px #121212',
   			'brutal-lg': '10px 10px 0px #121212',
   			'brutal-blue': '6px 6px 0px #1e40af',
-        'brutal-gold': '4px 4px 0px #D4AF37',
-        'brutal-gold-lg': '10px 10px 0px #D4AF37',
+        'brutal-green': '6px 6px 0px #00583F',
+        'brutal-green-lg': '10px 10px 0px #00583F',
+        'brutal-gold': '4px 4px 0px #FFD100',
+        'brutal-gold-lg': '10px 10px 0px #FFD100',
   			'brutal-hover': '2px 2px 0px #121212',
-        'brutal-gold-hover': '2px 2px 0px #D4AF37'
+        'brutal-gold-hover': '2px 2px 0px #FFD100'
   		},
   		keyframes: {
   			'accordion-down': {
