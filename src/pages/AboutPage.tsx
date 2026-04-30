@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about', active: true },
   { name: 'Contact', href: '/contact' },
-  { name: 'Community Portal', href: '/#portal', isCta: true },
+  { name: 'forUST', href: '/#portal', isCta: true },
 ];
 export function AboutPage() {
   return (
@@ -111,21 +111,21 @@ export function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <CapabilitySummaryCard
               icon={<QrCode className="w-8 h-8" />}
-              title="Perception"
-              description="Hardened Machine Vision for edge infrastructure."
-              tags={["CNN", "SoC"]}
-            />
-            <CapabilitySummaryCard
-              icon={<Code2 className="w-8 h-8" />}
-              title="Intelligence"
-              description="Predictive maintenance and Ops monitoring."
-              tags={["AI Ops", "Edge"]}
+              title="01. Computer Vision & AI"
+              description="CNN-Based QR Localizer: neural nets for real-time localization."
+              tags={["CNN", "QR-Localization", "Real-time"]}
             />
             <CapabilitySummaryCard
               icon={<Globe className="w-8 h-8" />}
-              title="Infrastructure"
-              description="High-fidelity power grid and battery modeling."
-              tags={["BESS", "Grids"]}
+              title="02. Energy Modeling"
+              description="Geothermal Favorability: multi-layer datasets for prospecting."
+              tags={["Geothermal", "Faults", "GIS"]}
+            />
+            <CapabilitySummaryCard
+              icon={<Code2 className="w-8 h-8" />}
+              title="03. Infrastructure"
+              description="Systems Integration: CD-SEM, metrology, digital logic (TTL/CMOS)."
+              tags={["CD-SEM", "Metrology", "TTL/CMOS"]}
             />
           </div>
         </section>

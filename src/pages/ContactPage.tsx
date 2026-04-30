@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact', active: true },
-  { name: 'Community Portal', href: '/#portal', isCta: true },
+  { name: 'forUST', href: '/#portal', isCta: true },
 ];
 const contactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -152,9 +152,9 @@ export function ContactPage() {
                     <FormItem>
                       <FormLabel className="font-black uppercase tracking-widest text-xs">Full Name *</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="RYNE SHELTON" 
-                          {...field} 
+                        <Input
+                          placeholder="RYNE SHELTON"
+                          {...field}
                           className="rounded-none border-2 border-rysys-black bg-rysys-cream focus:ring-rysys-gold focus:border-rysys-gold font-bold uppercase"
                         />
                       </FormControl>
@@ -169,9 +169,9 @@ export function ContactPage() {
                     <FormItem>
                       <FormLabel className="font-black uppercase tracking-widest text-xs">Email Address *</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="RS@RYSYS.ORG" 
-                          {...field} 
+                        <Input
+                          placeholder="RS@RYSYS.ORG"
+                          {...field}
                           className="rounded-none border-2 border-rysys-black bg-rysys-cream focus:ring-rysys-gold focus:border-rysys-gold font-bold uppercase"
                         />
                       </FormControl>
@@ -186,9 +186,9 @@ export function ContactPage() {
                     <FormItem>
                       <FormLabel className="font-black uppercase tracking-widest text-xs">Subject</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="INFRASTRUCTURE INQUIRY" 
-                          {...field} 
+                        <Input
+                          placeholder="INFRASTRUCTURE INQUIRY"
+                          {...field}
                           className="rounded-none border-2 border-rysys-black bg-rysys-cream focus:ring-rysys-gold focus:border-rysys-gold font-bold uppercase"
                         />
                       </FormControl>
@@ -203,9 +203,9 @@ export function ContactPage() {
                     <FormItem>
                       <FormLabel className="font-black uppercase tracking-widest text-xs">Message *</FormLabel>
                       <FormControl>
-                        <Textarea 
-                          placeholder="DESCRIBE YOUR SYSTEM REQUIREMENTS..." 
-                          {...field} 
+                        <Textarea
+                          placeholder="DESCRIBE YOUR SYSTEM REQUIREMENTS..."
+                          {...field}
                           className="rounded-none border-2 border-rysys-black bg-rysys-cream focus:ring-rysys-gold focus:border-rysys-gold font-bold uppercase min-h-[150px]"
                         />
                       </FormControl>
