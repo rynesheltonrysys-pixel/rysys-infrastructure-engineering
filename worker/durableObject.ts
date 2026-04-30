@@ -2,7 +2,6 @@ import { DurableObject } from "cloudflare:workers";
 import type { DemoItem, UserPublic, Doc, DocVersion, Comment, Message, AuthTokenPayload } from '@shared/types';
 import { MOCK_ITEMS } from '@shared/mock-data';
 export class GlobalDurableObject extends DurableObject {
-    // Auth & Portal Storage Keys
     private USERS_KEY = "forust_users";
     private DOCS_KEY = "forust_docs";
     private COMMENTS_KEY = "forust_comments";
@@ -16,7 +15,6 @@ export class GlobalDurableObject extends DurableObject {
         }
         return secret;
     }
-    // --- Auth Logic ---
     async registerUser(email: string, pass: string) {
         const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
         if (Object.values(users).some(u => u.email === email)) return null;
@@ -35,13 +33,11 @@ export class GlobalDurableObject extends DurableObject {
         return { token, user: { id: user.id, email: user.email, createdAt: user.createdAt } };
     }
     async issueToken(uid: string, email: string): Promise<string> {
-        const secret = await this.getSecret();
         const payload: AuthTokenPayload = {
-            uid, email, 
+            uid, email,
             iat: Math.floor(Date.now() / 1000),
-            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7) // 7 days
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7)
         };
-        // Simple Base64 mock JWT for MVP purposes (since real SubtleCrypto JWT is verbose)
         return btoa(JSON.stringify(payload));
     }
     async verifyToken(token: string): Promise<AuthTokenPayload | null> {
@@ -53,11 +49,11 @@ export class GlobalDurableObject extends DurableObject {
             return null;
         }
     }
-    // --- Docs Logic ---
     async listDocs(uid: string): Promise<Doc[]> {
         const docs = (await this.ctx.storage.get<Doc[]>(this.DOCS_KEY)) || [];
         const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
         const userEmail = users[uid]?.email;
+        if (!userEmail) return docs.filter(d => d.ownerId === uid);
         return docs.filter(d => d.ownerId === uid || d.sharedWith.includes(userEmail));
     }
     async createDoc(uid: string, title: string, content: string, shareWith: string[] = []): Promise<Doc> {
@@ -68,7 +64,7 @@ export class GlobalDurableObject extends DurableObject {
             title,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-            sharedWith,
+            sharedWith: shareWith,
             versions: [{ version: 1, content, createdAt: new Date().toISOString() }]
         };
         docs.push(newDoc);
@@ -86,7 +82,6 @@ export class GlobalDurableObject extends DurableObject {
         await this.ctx.storage.put(this.DOCS_KEY, docs);
         return doc;
     }
-    // --- Comments & Messages ---
     async getComments(docId: string): Promise<Comment[]> {
         const all = (await this.ctx.storage.get<Comment[]>(this.COMMENTS_KEY)) || [];
         return all.filter(c => c.docId === docId);
@@ -104,7 +99,7 @@ export class GlobalDurableObject extends DurableObject {
         const all = (await this.ctx.storage.get<Message[]>(this.MSGS_KEY)) || [];
         const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
         const email = users[uid]?.email;
-        return all.filter(m => m.fromId === uid || m.toEmail === email || m.toEmail === 'support');
+        return all.filter(m => m.fromId === uid || (email && m.toEmail === email) || m.toEmail === 'support');
     }
     async postMessage(fromId: string, fromEmail: string, toEmail: string, text: string) {
         const all = (await this.ctx.storage.get<Message[]>(this.MSGS_KEY)) || [];
@@ -115,10 +110,8 @@ export class GlobalDurableObject extends DurableObject {
         await this.ctx.storage.put(this.MSGS_KEY, all);
         return msg;
     }
-    // --- Demo Counter (Original) ---
     async getCounterValue(): Promise<number> {
-      const value = (await this.ctx.storage.get("counter_value")) || 0;
-      return value as number;
+      return (await this.ctx.storage.get("counter_value")) || 0;
     }
     async increment(amount = 1): Promise<number> {
       let value: number = (await this.ctx.storage.get("counter_value")) || 0;

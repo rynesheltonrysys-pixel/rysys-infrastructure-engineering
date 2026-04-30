@@ -18,7 +18,7 @@ const NAVBAR_LINKS = [
   { name: 'Leadership', href: '#leadership', isAnchor: true },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
-  { name: 'forUST', href: '/forust', isCta: true },
+  { name: 'forUSt', href: '/forust', isCta: true },
 ];
 const TRUST_AFFILIATIONS = ['IEEE', 'ANSI', 'OSHA', 'NEMA'];
 export function HomePage() {
@@ -27,9 +27,10 @@ export function HomePage() {
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-white border-b-4 border-rysys-black px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto h-20 md:h-24 flex items-center justify-between">
-          <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex items-center justify-center shadow-brutal-gold group-hover:translate-x-[1px] group-hover:translate-y-[1px] group-hover:shadow-brutal-gold-hover transition-all">
-              <span className="text-white font-black text-xl">R</span>
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex flex-col items-center justify-center shadow-brutal-gold group-hover:translate-x-[1px] group-hover:translate-y-[1px] group-hover:shadow-brutal-gold-hover transition-all leading-none overflow-hidden">
+              <span className="text-white font-black text-[10px] select-none">RY</span>
+              <span className="text-white font-black text-[10px] select-none">SYS</span>
             </div>
             <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
           </div>
@@ -37,28 +38,23 @@ export function HomePage() {
             {NAVBAR_LINKS.map((link) => (
               link.isCta ? (
                 <Link key={link.name} to={link.href} className="inline-block">
-                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-bold uppercase py-6 px-8 h-auto">
-                    {link.name}
+                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-6 px-8 h-auto">
+                    <span className="font-black uppercase tracking-[0.1em]">{link.name}</span>
                   </Button>
                 </Link>
               ) : (
-                link.isAnchor ? (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    className="text-sm font-bold uppercase tracking-widest hover:text-rysys-gold transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                ) : (
-                  <Link
-                    key={link.name}
-                    to={link.href}
-                    className="text-sm font-bold uppercase tracking-widest hover:text-rysys-gold transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                )
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-sm font-bold uppercase tracking-widest hover:text-rysys-gold transition-colors"
+                  onClick={(e) => {
+                    if (!link.isAnchor) return;
+                    e.preventDefault();
+                    document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  {link.name}
+                </a>
               )
             ))}
           </div>
@@ -90,29 +86,29 @@ export function HomePage() {
                 Engineering the foundation for the silicon century.
               </p>
             </div>
-            {/* Updated Hero Right Column */}
             <div className="lg:col-span-5 relative">
               <div className="aspect-square border-4 border-rysys-black shadow-brutal-lg overflow-hidden relative group bg-rysys-cream">
-                <img 
-                  src="https://images.unsplash.com/photo-1541457523724-95f54f7740cc?auto=format&fit=crop&q=80&w=800&h=800" 
-                  alt="Infrastructure" 
+                <img
+                  src="https://images.unsplash.com/photo-1541457523724-95f54f7740cc?auto=format&fit=crop&q=80&w=800&h=800"
+                  alt="Infrastructure"
                   className="absolute inset-0 w-full h-full object-cover grayscale opacity-40 group-hover:scale-110 transition-transform duration-700"
                 />
-                {/* Logo Tile Overlay */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-48 h-48 bg-rysys-gold border-4 border-rysys-black shadow-brutal flex flex-col items-center justify-center gap-2 group-hover:rotate-3 transition-transform">
-                    <span className="text-white font-black text-8xl leading-none">R</span>
-                    <span className="text-rysys-black font-black uppercase tracking-[0.2em] text-sm">RYSYS</span>
+                    <div className="flex flex-col items-center leading-none">
+                      <span className="text-white font-black text-6xl">RY</span>
+                      <span className="text-white font-black text-6xl">SYS</span>
+                    </div>
+                    <span className="text-rysys-black font-black uppercase tracking-[0.2em] text-xs">EST. 2025</span>
                   </div>
                 </div>
-                {/* Simplified Status Chip */}
-                <div className="absolute bottom-6 left-6 bg-white border-3 border-rysys-black px-4 py-2 shadow-brutal flex items-center gap-2">
+                <div className="absolute top-6 right-6 bg-white border-3 border-rysys-black px-4 py-2 shadow-brutal flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                   <span className="font-mono text-[10px] font-black uppercase tracking-tighter">GRID_LINK: ACTIVE</span>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 bg-rysys-green-power border-4 border-rysys-black px-6 py-4 shadow-brutal z-20 text-white">
-                <span className="font-black italic text-xl uppercase tracking-widest">PORTLAND_OR</span>
+              <div className="absolute -bottom-6 -left-6 bg-rysys-gold border-4 border-rysys-black px-6 py-4 shadow-brutal z-20 text-rysys-black">
+                <span className="font-black italic text-2xl uppercase tracking-tighter">Team First.</span>
               </div>
             </div>
           </div>
@@ -202,20 +198,22 @@ export function HomePage() {
           </div>
         </div>
       </section>
-      {/* forUST Section */}
+      {/* forUSt Section */}
       <section id="portal" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-28">
         <div className="bg-rysys-green-power border-4 border-rysys-black p-12 md:p-20 text-center shadow-brutal-gold-lg relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rotate-45 translate-x-16 -translate-y-16" />
-          <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8">
-            Join <br /> forUST
+          <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-[0.1em] mb-8">
+            Join <br /> forUSt
           </h2>
           <p className="text-white/80 text-xl md:text-2xl font-bold mb-12 max-w-2xl mx-auto leading-relaxed">
             Access our open-source infrastructure tools, engineering standards, and technical whitepapers.
           </p>
           <div className="flex justify-center mt-4">
             <Link to="/forust">
-              <Button className="bg-white text-rysys-black border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:text-rysys-gold hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-black uppercase py-8 px-12 text-xl h-auto group">
-                Enter Portal <Terminal className="ml-2 group-hover:text-rysys-gold transition-colors" />
+              <Button className="bg-white text-rysys-black border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:text-rysys-gold hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-8 px-12 text-xl h-auto group">
+                <span className="font-black uppercase tracking-[0.1em] flex items-center">
+                  Enter Portal <Terminal className="ml-3 group-hover:text-rysys-gold transition-colors" />
+                </span>
               </Button>
             </Link>
           </div>
@@ -226,9 +224,10 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-14 md:gap-16 mb-20">
             <div className="col-span-2 space-y-6">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-rysys-gold border-2 border-rysys-black flex items-center justify-center shadow-brutal-gold">
-                  <span className="text-white font-black">R</span>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-rysys-gold border-2 border-rysys-black flex flex-col items-center justify-center shadow-brutal-gold leading-none overflow-hidden">
+                  <span className="text-white font-black text-[8px]">RY</span>
+                  <span className="text-white font-black text-[8px]">SYS</span>
                 </div>
                 <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
               </div>
@@ -242,7 +241,9 @@ export function HomePage() {
                 <Link to="/" className="hover:text-rysys-gold transition-colors">Home</Link>
                 <Link to="/about" className="hover:text-rysys-gold transition-colors">About RYSYS</Link>
                 <Link to="/contact" className="hover:text-rysys-gold transition-colors">Contact</Link>
-                <Link to="/forust" className="hover:text-rysys-gold transition-colors">forUST</Link>
+                <Link to="/forust" className="hover:text-rysys-gold transition-colors">
+                  <span className="font-black uppercase tracking-[0.1em]">forUSt</span>
+                </Link>
               </div>
             </div>
             <div>

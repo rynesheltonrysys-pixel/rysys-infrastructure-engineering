@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about', active: true },
   { name: 'Contact', href: '/contact' },
-  { name: 'forUST', href: '/forust', isCta: true },
+  { name: 'forUSt', href: '/forust', isCta: true },
 ];
 export function AboutPage() {
   return (
@@ -22,20 +22,21 @@ export function AboutPage() {
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-white border-b-4 border-rysys-black px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto h-20 md:h-24 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex items-center justify-center shadow-brutal-gold group-hover:translate-x-[1px] group-hover:translate-y-[1px] group-hover:shadow-brutal-gold-hover transition-all">
-              <span className="text-white font-black text-xl">R</span>
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex flex-col items-center justify-center shadow-brutal-gold group-hover:translate-x-[1px] group-hover:translate-y-[1px] group-hover:shadow-brutal-gold-hover transition-all leading-none overflow-hidden">
+              <span className="text-white font-black text-[10px] select-none">RY</span>
+              <span className="text-white font-black text-[10px] select-none">SYS</span>
             </div>
             <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
           </Link>
           <div className="hidden md:flex items-center gap-10">
             {NAV_LINKS.map((link) => (
               link.isCta ? (
-                <a key={link.name} href={link.href} className="inline-block">
-                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-bold uppercase py-6 px-8 h-auto">
-                    {link.name}
+                <Link key={link.name} to={link.href} className="inline-block">
+                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-6 px-8 h-auto">
+                    <span className="font-black uppercase tracking-[0.1em]">{link.name}</span>
                   </Button>
-                </a>
+                </Link>
               ) : (
                 <Link
                   key={link.name}
