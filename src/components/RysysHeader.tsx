@@ -1,60 +1,28 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Trees, Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Trees, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 interface RysysHeaderProps {
-  isHome?: boolean;
+  isHome?: boolean; // Kept for signature compatibility
   current?: 'home' | 'about' | 'contact' | 'forust';
 }
 const NAV_LINKS = [
-  { name: 'Capabilities', href: '#capabilities', isAnchor: true },
-  { name: 'Leadership', href: '#leadership', isAnchor: true },
   { name: 'About', href: '/about', key: 'about' },
   { name: 'Contact', href: '/contact', key: 'contact' },
 ];
-export function RysysHeader({ isHome, current }: RysysHeaderProps) {
+export function RysysHeader({ current }: RysysHeaderProps) {
   const [open, setOpen] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
-  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (isHome) {
-      e.preventDefault();
-      setOpen(false);
-      const id = href.replace('#', '');
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-        window.history.pushState(null, '', href);
-      }
-    } else {
-      // Navigation to home with hash is handled by default Link behavior 
-      // but we close the sheet anyway
-      setOpen(false);
-    }
-  };
   const NavItems = ({ mobile = false }: { mobile?: boolean }) => (
     <>
       {NAV_LINKS.map((link) => {
-        const isActive = current === link.key || (current === 'home' && link.isAnchor && location.hash === link.href);
+        const isActive = current === link.key;
         const linkClass = cn(
           "text-sm font-bold uppercase tracking-widest transition-colors hover:text-rysys-gold whitespace-nowrap",
           isActive && "text-rysys-gold underline underline-offset-8 decoration-4",
           mobile && "text-lg py-4 border-b-2 border-rysys-black/5 w-full text-left"
         );
-        if (link.isAnchor) {
-          return (
-            <Link
-              key={link.name}
-              to={isHome ? link.href : `/${link.href}`}
-              className={linkClass}
-              onClick={(e) => handleAnchorClick(e as any, link.href)}
-            >
-              {link.name}
-            </Link>
-          );
-        }
         return (
           <Link
             key={link.name}
