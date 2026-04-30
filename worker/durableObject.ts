@@ -49,6 +49,12 @@ export class GlobalDurableObject extends DurableObject {
             return null;
         }
     }
+    async listUsersPublic(): Promise<UserPublic[]> {
+        const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
+        return Object.values(users)
+            .map(u => ({ id: u.id, email: u.email, createdAt: u.createdAt } as UserPublic))
+            .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    }
     async listDocs(uid: string): Promise<Doc[]> {
         const docs = (await this.ctx.storage.get<Doc[]>(this.DOCS_KEY)) || [];
         const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
@@ -95,16 +101,44 @@ export class GlobalDurableObject extends DurableObject {
         await this.ctx.storage.put(this.COMMENTS_KEY, all);
         return comment;
     }
-    async listMessages(uid: string): Promise<Message[]> {
+    async listMessages(uid: string, peerId?: string, peerEmail?: string): Promise<Message[]> {
         const all = (await this.ctx.storage.get<Message[]>(this.MSGS_KEY)) || [];
         const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
         const email = users[uid]?.email;
-        return all.filter(m => m.fromId === uid || (email && m.toEmail === email) || m.toEmail === 'support');
+        let filtered: Message[];
+        if (peerId || peerEmail) {
+            // Private DM thread between current user and specified peer
+            filtered = all.filter(m => {
+                const isFromMe = m.fromId === uid;
+                const isFromPeer = (peerId && m.fromId === peerId) || (peerEmail && m.fromEmail === peerEmail);
+                const isToMe = (email && m.toEmail === email) || m.toId === uid;
+                const isToPeer = (peerId && m.toId === peerId) || (peerEmail && m.toEmail === peerEmail);
+                return (isFromMe && isToPeer) || (isFromPeer && isToMe);
+            });
+        } else {
+            // Legacy / Shared feed logic
+            filtered = all.filter(m => m.fromId === uid || (email && m.toEmail === email) || m.toEmail === 'support');
+        }
+        return filtered.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
     }
-    async postMessage(fromId: string, fromEmail: string, toEmail: string, text: string) {
+    async postMessage(fromId: string, fromEmail: string, toEmail: string | undefined, text: string, toUserId?: string) {
         const all = (await this.ctx.storage.get<Message[]>(this.MSGS_KEY)) || [];
+        const users = (await this.ctx.storage.get<Record<string, any>>(this.USERS_KEY)) || {};
+        let resolvedToId = toUserId;
+        let resolvedToEmail = toEmail;
+        if (toUserId && !resolvedToEmail) {
+            resolvedToEmail = users[toUserId]?.email;
+        } else if (toEmail && !resolvedToId) {
+            resolvedToId = Object.values(users).find(u => u.email === toEmail)?.id;
+        }
         const msg: Message = {
-            id: crypto.randomUUID(), fromId, fromEmail, toEmail, text, createdAt: new Date().toISOString()
+            id: crypto.randomUUID(),
+            fromId,
+            fromEmail,
+            toId: resolvedToId,
+            toEmail: resolvedToEmail || 'support',
+            text,
+            createdAt: new Date().toISOString()
         };
         all.push(msg);
         await this.ctx.storage.put(this.MSGS_KEY, all);

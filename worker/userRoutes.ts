@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { Env } from './core-utils';
-import type { DemoItem, ApiResponse, AuthTokenPayload } from '@shared/types';
+import type { DemoItem, ApiResponse, AuthTokenPayload, UserPublic, Message } from '@shared/types';
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
     const protectedMiddleware = async (c: any, next: any) => {
         const authHeader = c.req.header('Authorization');
@@ -29,6 +29,11 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
         const result = await stub.loginUser(email, password);
         if (!result) return c.json({ success: false, error: 'Invalid credentials' }, 401);
         return c.json({ success: true, data: result });
+    });
+    app.get('/api/forust/users', protectedMiddleware, async (c) => {
+        const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
+        const users = await stub.listUsersPublic();
+        return c.json({ success: true, data: users } satisfies ApiResponse<UserPublic[]>);
     });
     app.get('/api/forust/docs', protectedMiddleware, async (c) => {
         const user = (c as any).get('user') as AuthTokenPayload;
@@ -67,16 +72,18 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     });
     app.get('/api/forust/messages', protectedMiddleware, async (c) => {
         const user = (c as any).get('user') as AuthTokenPayload;
+        const peerId = c.req.query('peerId');
+        const peerEmail = c.req.query('peerEmail');
         const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
-        const msgs = await stub.listMessages(user.uid);
-        return c.json({ success: true, data: msgs });
+        const msgs = await stub.listMessages(user.uid, peerId, peerEmail);
+        return c.json({ success: true, data: msgs } satisfies ApiResponse<Message[]>);
     });
     app.post('/api/forust/messages', protectedMiddleware, async (c) => {
         const user = (c as any).get('user') as AuthTokenPayload;
-        const { toEmail, text } = await c.req.json();
+        const { toEmail, toUserId, text } = await c.req.json();
         const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));
-        const msg = await stub.postMessage(user.uid, user.email, toEmail, text);
-        return c.json({ success: true, data: msg });
+        const msg = await stub.postMessage(user.uid, user.email, toEmail, text, toUserId);
+        return c.json({ success: true, data: msg } satisfies ApiResponse<Message>);
     });
     app.get('/api/demo', async (c) => {
         const stub = c.env.GlobalDurableObject.get(c.env.GlobalDurableObject.idFromName("global"));

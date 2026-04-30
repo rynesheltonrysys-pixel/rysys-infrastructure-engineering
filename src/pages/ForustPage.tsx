@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-  FileText, Plus, LogOut, Send, History, MessageSquare, Loader2
+  FileText, Plus, LogOut, Send, History, MessageSquare, Loader2, Search, User as UserIcon, RefreshCw
 } from 'lucide-react';
 import { isAuthed, authHeader, clearAuth, getUser } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
@@ -9,34 +9,62 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger 
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
 } from '@/components/ui/dialog';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import { toast } from 'sonner';
-import type { Doc, Message, Comment } from '@shared/types';
+import type { Doc, Message, Comment, UserPublic } from '@shared/types';
 export function ForustPage() {
   const navigate = useNavigate();
   const [docs, setDocs] = useState<Doc[]>([]);
-  const [msgs, setMsgs] = useState<Message[]>([]);
+  const [sharedMsgs, setSharedMsgs] = useState<Message[]>([]);
+  const [users, setUsers] = useState<UserPublic[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'shared' | 'direct'>('shared');
+  // DM specific state
+  const [peer, setPeer] = useState<UserPublic | null>(null);
+  const [dmMsgs, setDmMsgs] = useState<Message[]>([]);
+  const [dmLoading, setDmLoading] = useState(false);
+  const [userSearch, setUserSearch] = useState('');
   const user = getUser();
   const fetchData = useCallback(async () => {
     try {
-      const [dRes, mRes] = await Promise.all([
+      const [dRes, mRes, uRes] = await Promise.all([
         fetch('/api/forust/docs', { headers: authHeader() }),
-        fetch('/api/forust/messages', { headers: authHeader() })
+        fetch('/api/forust/messages', { headers: authHeader() }),
+        fetch('/api/forust/users', { headers: authHeader() })
       ]);
-      const [dJson, mJson] = await Promise.all([dRes.json(), mRes.json()]);
+      const [dJson, mJson, uJson] = await Promise.all([dRes.json(), mRes.json(), uRes.json()]);
       if (dJson.success) setDocs(dJson.data);
-      if (mJson.success) setMsgs(mJson.data);
+      if (mJson.success) setSharedMsgs(mJson.data);
+      if (uJson.success) setUsers(uJson.data);
     } catch {
       toast.error('Sync failure');
     } finally {
       setLoading(false);
+    }
+  }, []);
+  const fetchDmMessages = useCallback(async (pId: string) => {
+    setDmLoading(true);
+    try {
+      const res = await fetch(`/api/forust/messages?peerId=${pId}`, { headers: authHeader() });
+      const json = await res.json();
+      if (json.success) setDmMsgs(json.data);
+    } catch {
+      toast.error('DM thread sync failed');
+    } finally {
+      setDmLoading(false);
     }
   }, []);
   useEffect(() => {
@@ -46,10 +74,32 @@ export function ForustPage() {
       fetchData();
     }
   }, [navigate, fetchData]);
+  // Focus-based refresh
+  useEffect(() => {
+    const handleFocus = () => {
+      if (activeTab === 'shared') {
+        fetchData();
+      } else if (activeTab === 'direct' && peer) {
+        fetchDmMessages(peer.id);
+      }
+    };
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') handleFocus();
+    });
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('visibilitychange', handleFocus);
+    };
+  }, [activeTab, peer, fetchData, fetchDmMessages]);
   const handleLogout = () => {
     clearAuth();
     navigate('/signin');
   };
+  const filteredUsers = users.filter(u => 
+    u.id !== user?.id && 
+    (u.email.toLowerCase().includes(userSearch.toLowerCase()))
+  );
   if (loading) return <div className="min-h-screen bg-rysys-cream flex items-center justify-center font-black uppercase tracking-widest animate-pulse">Initializing Portal...</div>;
   return (
     <div className="min-h-screen bg-rysys-cream text-rysys-black font-sans flex flex-col">
@@ -89,22 +139,99 @@ export function ForustPage() {
               )}
             </div>
           </div>
-          <div className="lg:col-span-4 space-y-8">
+          <div className="lg:col-span-4 space-y-6">
             <h2 className="text-3xl font-black uppercase tracking-tighter">Intelligence Feed</h2>
-            <Card className="border-4 border-rysys-black bg-white shadow-brutal flex flex-col h-[600px] rounded-none overflow-hidden">
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {msgs.map(m => (
-                  <div key={m.id} className={`p-3 border-2 border-rysys-black ${m.fromId === user?.id ? 'bg-rysys-cream ml-4 shadow-brutal-hover' : 'bg-white mr-4 shadow-brutal-hover'}`}>
-                    <div className="flex justify-between items-center mb-1 border-b border-rysys-black/10 pb-1">
-                      <span className="text-[10px] font-black uppercase truncate max-w-[120px]">{m.fromId === user?.id ? 'You' : m.fromEmail}</span>
-                      <span className="text-[8px] opacity-50 font-mono">{new Date(m.createdAt).toLocaleTimeString()}</span>
-                    </div>
-                    <p className="text-sm font-medium mt-1">{m.text}</p>
+            <Tabs defaultValue="shared" onValueChange={(v) => setActiveTab(v as any)} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 bg-rysys-grey border-4 border-rysys-black rounded-none h-14 p-1">
+                <TabsTrigger value="shared" className="data-[state=active]:bg-rysys-black data-[state=active]:text-white rounded-none font-black uppercase tracking-widest text-xs">Shared</TabsTrigger>
+                <TabsTrigger value="direct" className="data-[state=active]:bg-rysys-black data-[state=active]:text-white rounded-none font-black uppercase tracking-widest text-xs">Direct</TabsTrigger>
+              </TabsList>
+              <TabsContent value="shared" className="mt-6">
+                <Card className="border-4 border-rysys-black bg-white shadow-brutal flex flex-col h-[600px] rounded-none overflow-hidden">
+                  <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                    {sharedMsgs.map(m => (
+                      <div key={m.id} className={`p-3 border-2 border-rysys-black ${m.fromId === user?.id ? 'bg-rysys-cream ml-4 shadow-brutal-hover' : 'bg-white mr-4 shadow-brutal-hover'}`}>
+                        <div className="flex justify-between items-center mb-1 border-b border-rysys-black/10 pb-1">
+                          <span className="text-[10px] font-black uppercase truncate max-w-[120px]">{m.fromId === user?.id ? 'You' : m.fromEmail}</span>
+                          <span className="text-[8px] opacity-50 font-mono">{new Date(m.createdAt).toLocaleTimeString()}</span>
+                        </div>
+                        <p className="text-sm font-medium mt-1">{m.text}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <MessageComposer onSent={fetchData} />
-            </Card>
+                  <MessageComposer onSent={fetchData} />
+                </Card>
+              </TabsContent>
+              <TabsContent value="direct" className="mt-6 space-y-4">
+                <Card className="border-4 border-rysys-black bg-white p-4 rounded-none shadow-brutal-hover">
+                  <div className="relative mb-4">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input 
+                      placeholder="SEARCH OPERATORS..." 
+                      className="pl-10 border-2 border-rysys-black rounded-none bg-rysys-cream font-bold uppercase"
+                      value={userSearch}
+                      onChange={e => setUserSearch(e.target.value)}
+                    />
+                  </div>
+                  <ScrollArea className="h-32">
+                    <div className="space-y-1 pr-4">
+                      {filteredUsers.map(u => (
+                        <button
+                          key={u.id}
+                          onClick={() => { setPeer(u); fetchDmMessages(u.id); }}
+                          className={`w-full text-left p-2 border-2 transition-all font-black uppercase text-[10px] tracking-widest ${peer?.id === u.id ? 'bg-rysys-gold text-white border-rysys-black' : 'hover:bg-rysys-grey border-transparent'}`}
+                        >
+                          {u.email}
+                        </button>
+                      ))}
+                      {filteredUsers.length === 0 && (
+                        <p className="text-center text-[10px] font-bold opacity-30 py-4 uppercase">No Nodes Found</p>
+                      )}
+                    </div>
+                  </ScrollArea>
+                </Card>
+                {peer ? (
+                  <Card className="border-4 border-rysys-black bg-white shadow-brutal flex flex-col h-[450px] rounded-none overflow-hidden relative">
+                    <div className="p-3 bg-rysys-black text-white flex justify-between items-center">
+                      <div className="flex items-center gap-2">
+                        <UserIcon className="w-4 h-4 text-rysys-gold" />
+                        <span className="text-[10px] font-black uppercase truncate max-w-[150px]">{peer.email}</span>
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => fetchDmMessages(peer.id)}
+                        className="h-6 w-6 hover:bg-white/10"
+                      >
+                        <RefreshCw className={`w-3 h-3 ${dmLoading ? 'animate-spin' : ''}`} />
+                      </Button>
+                    </div>
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-rysys-cream/10">
+                      {dmMsgs.map(m => (
+                        <div key={m.id} className={`max-w-[85%] p-3 border-2 border-rysys-black ${m.fromId === user?.id ? 'ml-auto bg-rysys-gold text-white shadow-brutal-hover' : 'mr-auto bg-white shadow-brutal-hover'}`}>
+                          <p className="text-sm font-bold leading-snug">{m.text}</p>
+                          <div className={`mt-1 text-[8px] font-mono opacity-60 text-right ${m.fromId === user?.id ? 'text-white' : ''}`}>
+                            {new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                        </div>
+                      ))}
+                      {dmMsgs.length === 0 && !dmLoading && (
+                        <div className="h-full flex flex-col items-center justify-center opacity-30 text-center py-10">
+                          <MessageSquare className="w-8 h-8 mb-2" />
+                          <p className="text-[10px] font-black uppercase">Start Secure Session</p>
+                        </div>
+                      )}
+                    </div>
+                    <MessageComposer peerId={peer.id} onSent={() => fetchDmMessages(peer.id)} />
+                  </Card>
+                ) : (
+                  <div className="h-[450px] border-4 border-dashed border-rysys-black/20 flex flex-col items-center justify-center opacity-50 bg-white/30 text-center px-8">
+                    <UserIcon className="w-12 h-12 mb-4" />
+                    <p className="font-black uppercase text-xs tracking-widest leading-loose">Select a peer node to initiate <br/> private communications</p>
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </main>
@@ -210,15 +337,6 @@ function DocViewer({ doc: initialDoc }: { doc: Doc }) {
         <div>
           <div className="flex items-center gap-3 mb-1">
             <h2 className="text-2xl font-black uppercase tracking-tighter">{doc.title}</h2>
-            {doc.sharedWith.length > 0 && (
-              <div className="flex gap-1">
-                {doc.sharedWith.map(email => (
-                  <Badge key={email} className="bg-rysys-grey text-rysys-black border border-rysys-black rounded-none text-[8px] font-bold">
-                    {email.split('@')[0]}
-                  </Badge>
-                ))}
-              </div>
-            )}
           </div>
           <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">INFRASTRUCTURE ID: {doc.id}</p>
         </div>
@@ -237,10 +355,6 @@ function DocViewer({ doc: initialDoc }: { doc: Doc }) {
       </div>
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         <div className="flex-1 overflow-y-auto p-8 font-mono text-sm leading-relaxed bg-white/40 border-b-4 lg:border-b-0 lg:border-r-4 border-rysys-black">
-          <div className="mb-6 pb-2 border-b-2 border-rysys-black/5 flex justify-between items-center">
-            <span className="text-[10px] font-black uppercase tracking-widest">Protocol Buffer</span>
-            <span className="text-[10px] font-mono opacity-50">STAMP: {new Date(currentVersion.createdAt).toLocaleString()}</span>
-          </div>
           <pre className="whitespace-pre-wrap">{currentVersion.content}</pre>
           <div className="mt-12 pt-8 border-t-4 border-rysys-black">
             <h4 className="text-sm font-black uppercase tracking-widest mb-4 flex items-center gap-2">
@@ -369,15 +483,21 @@ function NewDocDialog({ onCreated }: { onCreated: () => void }) {
     </Dialog>
   );
 }
-function MessageComposer({ onSent }: { onSent: () => void }) {
+function MessageComposer({ onSent, peerId }: { onSent: () => void, peerId?: string }) {
   const [text, setText] = useState('');
+  const [sending, setSending] = useState(false);
   const handleSend = async () => {
-    if (!text.trim()) return;
+    if (!text.trim() || sending) return;
+    setSending(true);
     try {
       const res = await fetch('/api/forust/messages', {
         method: 'POST',
         headers: authHeader(),
-        body: JSON.stringify({ toEmail: 'support', text })
+        body: JSON.stringify({ 
+          toEmail: peerId ? undefined : 'support', 
+          toUserId: peerId,
+          text 
+        })
       });
       if (res.ok) {
         setText('');
@@ -385,6 +505,8 @@ function MessageComposer({ onSent }: { onSent: () => void }) {
       }
     } catch {
       toast.error('Transmission failed');
+    } finally {
+      setSending(false);
     }
   };
   return (
@@ -393,11 +515,16 @@ function MessageComposer({ onSent }: { onSent: () => void }) {
         value={text}
         onChange={e => setText(e.target.value)}
         className="border-2 border-rysys-black rounded-none bg-white flex-1 font-bold"
-        placeholder="SIGNAL..."
+        placeholder={peerId ? "SECURE SIGNAL..." : "BROADCAST..."}
         onKeyDown={e => e.key === 'Enter' && handleSend()}
+        disabled={sending}
       />
-      <Button onClick={handleSend} className="bg-rysys-black text-white rounded-none px-4 hover:bg-rysys-green-power hover:shadow-brutal-hover transition-all">
-        <Send className="w-4 h-4" />
+      <Button 
+        onClick={handleSend} 
+        disabled={sending || !text.trim()}
+        className="bg-rysys-black text-white rounded-none px-4 hover:bg-rysys-green-power hover:shadow-brutal-hover transition-all"
+      >
+        {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
       </Button>
     </div>
   );
