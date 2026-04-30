@@ -80,12 +80,13 @@ export function HomePage() {
                 Established 2025 // <span className="text-rysys-gold">v1.2.0</span>
               </Badge>
               <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tighter uppercase">
-                Physical <br />
-                <span className="text-rysys-green-power">Intelligence</span> <br />
-                at Scale.
+                ELITE ENGINEERING. <br />
+                <span className="normal-case bg-gradient-to-br from-rysys-gold to-rysys-green-power bg-clip-text text-transparent">
+                  Systemic Wealth.
+                </span>
               </h1>
               <p className="mt-4 text-xl md:text-2xl font-medium leading-loose max-w-2xl text-muted-foreground border-l-4 border-rysys-gold pl-8 md:pl-10 bg-rysys-cream/80 backdrop-blur-sm md:bg-transparent">
-                RYSYS bridges the gap between massive-scale electrical infrastructure and next-generation AI automation. Engineering the foundation for the silicon century.
+                Led by Silicon Forest expertise. We bridge Electrical Engineering, AI-driven IT, and Real Estate Investment into a unified fortress of innovation.
               </p>
             </div>
             <div className="lg:col-span-5 relative">
