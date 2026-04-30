@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Zap,
+  QrCode,
   Cpu,
   Globe,
   CheckCircle2,
@@ -52,39 +52,50 @@ export function HomePage() {
         </div>
       </nav>
       {/* Hero Section */}
-      <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-28 lg:py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7 space-y-10 md:space-y-12">
-            <Badge className="bg-white text-rysys-black border-2 border-rysys-gold rounded-none px-4 py-1 font-mono uppercase font-bold text-sm shadow-brutal-gold">
-              Established 2025 // <span className="text-rysys-gold">v1.0.4</span>
-            </Badge>
-            <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tighter uppercase">
-              Physical <br />
-              <span className="text-rysys-blue">Intelligence</span> <br />
-              at Scale.
-            </h1>
-            <p className="mt-4 text-xl md:text-2xl font-medium leading-loose max-w-2xl text-muted-foreground border-l-4 border-rysys-gold pl-8 md:pl-10">
-              RYSYS bridges the gap between massive-scale electrical infrastructure and next-generation AI automation.
-              Engineering the foundation for the silicon century.
-            </p>
-          </div>
-          <div className="lg:col-span-5 relative">
-            <div className="aspect-square bg-rysys-blue border-4 border-rysys-black shadow-brutal-lg flex items-center justify-center p-8 overflow-hidden relative group">
-              <Cpu className="w-full h-full text-white/20 absolute rotate-12 group-hover:rotate-45 transition-transform duration-700" />
-              <div className="bg-white p-6 border-4 border-rysys-black shadow-brutal z-10 space-y-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-                  <span className="font-mono text-xs font-bold uppercase tracking-tighter">System Health: Nominal</span>
-                </div>
-                <div className="space-y-1 font-mono text-sm">
-                  <p className="text-rysys-gold font-bold">GRID_LINK: ACTIVE</p>
-                  <p>PWR_LOAD: 4.8 GW</p>
-                  <p>AI_SYNC: 99.99%</p>
+      <header className="relative overflow-hidden border-b-4 border-rysys-black">
+        {/* Portland Skyline Background Overlay */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img 
+            src="https://images.unsplash.com/photo-1541457523724-95f54f7740cc?auto=format&fit=crop&q=80&w=1600" 
+            alt="Portland Skyline"
+            className="w-full h-full object-cover object-center grayscale contrast-125 opacity-20"
+          />
+          <div className="absolute inset-0 bg-rysys-blue/10 mix-blend-multiply" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-28 lg:py-32 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7 space-y-10 md:space-y-12">
+              <Badge className="bg-white text-rysys-black border-2 border-rysys-gold rounded-none px-4 py-1 font-mono uppercase font-bold text-sm shadow-brutal-gold">
+                Established 2025 // <span className="text-rysys-gold">v1.1.0</span>
+              </Badge>
+              <h1 className="text-6xl md:text-8xl font-black leading-[0.9] tracking-tighter uppercase">
+                Physical <br />
+                <span className="text-rysys-blue">Intelligence</span> <br />
+                at Scale.
+              </h1>
+              <p className="mt-4 text-xl md:text-2xl font-medium leading-loose max-w-2xl text-muted-foreground border-l-4 border-rysys-gold pl-8 md:pl-10 bg-rysys-cream/80 backdrop-blur-sm md:bg-transparent">
+                RYSYS bridges the gap between massive-scale electrical infrastructure and next-generation AI automation.
+                Engineering the foundation for the silicon century.
+              </p>
+            </div>
+            <div className="lg:col-span-5 relative">
+              <div className="aspect-square bg-rysys-blue border-4 border-rysys-black shadow-brutal-lg flex items-center justify-center p-8 overflow-hidden relative group">
+                <Cpu className="w-full h-full text-white/20 absolute rotate-12 group-hover:rotate-45 transition-transform duration-700" />
+                <div className="bg-white p-6 border-4 border-rysys-black shadow-brutal z-10 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                    <span className="font-mono text-xs font-bold uppercase tracking-tighter">System Health: Nominal</span>
+                  </div>
+                  <div className="space-y-1 font-mono text-sm">
+                    <p className="text-rysys-gold font-bold">GRID_LINK: ACTIVE</p>
+                    <p>PWR_LOAD: 4.8 GW</p>
+                    <p>AI_SYNC: 99.99%</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="absolute -bottom-6 -left-6 bg-yellow-400 border-4 border-rysys-gold px-6 py-4 shadow-brutal-gold z-20">
-              <span className="font-black italic text-xl uppercase">Safety First.</span>
+              <div className="absolute -bottom-6 -left-6 bg-yellow-400 border-4 border-rysys-gold px-6 py-4 shadow-brutal-gold z-20">
+                <span className="font-black italic text-xl uppercase">Safety First.</span>
+              </div>
             </div>
           </div>
         </div>
@@ -111,10 +122,10 @@ export function HomePage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
           <CapabilityCard
-            icon={<Zap className="w-10 h-10" />}
-            title="High-Voltage Engineering"
-            description="Specialized design for substation automation and grid-scale power distribution systems. We handle the heavy lifting."
-            tags={["400kV", "SCADA", "Protective Relaying"]}
+            icon={<QrCode className="w-10 h-10" />}
+            title="Machine Vision & SoC"
+            description="CNN-Based QR Localizer and SoC integration for noisy environments. Real-time embedded processing for robust edge perception."
+            tags={["CNN", "QR Localization", "Real-time SoC"]}
           />
           <CapabilityCard
             icon={<Code2 className="w-10 h-10" />}
@@ -124,8 +135,8 @@ export function HomePage() {
           />
           <CapabilityCard
             icon={<Globe className="w-10 h-10" />}
-            title="Sustainable Infra"
-            description="Integrating renewable sources into legacy grids with smart-switching technology and battery storage solutions."
+            title="Energy Modeling & Infra"
+            description="High-fidelity energy modeling and smart-switching technology to integrate battery storage (BESS) into legacy power grids."
             tags={["BESS", "Microgrids", "Solar-Tie"]}
           />
         </div>
