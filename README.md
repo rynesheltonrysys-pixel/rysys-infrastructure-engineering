@@ -1,6 +1,6 @@
 # Cloudflare Workers React Template
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/rynesheltonrysys-pixel/rysys-infrastructure-engineering)
 
 A production-ready full-stack starter template for building modern web applications with Cloudflare Workers, React, Vite, and shadcn/ui. Includes a powerful backend with Hono routing, Durable Objects for stateful data, and a beautiful, responsive frontend with dark mode support.
 
@@ -79,7 +79,7 @@ Customize the homepage in `src/pages/HomePage.tsx` and replace demo sidebar in `
    Deploys Worker + static assets. Configured via `wrangler.jsonc`.
 
 3. **One-Click Deploy**:
-   [cloudflarebutton]
+   [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/rynesheltonrysys-pixel/rysys-infrastructure-engineering)
 
 **Notes**:
 - Assets served via Cloudflare (SPA routing).
