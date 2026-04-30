@@ -6,11 +6,24 @@ import {
   QrCode,
   Code2,
   Globe,
-  Trees
+  Trees,
+  Target,
+  Route,
+  Wrench,
+  Users,
+  Award,
+  MapPin,
+  ChevronDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 const NAV_LINKS = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about', active: true },
@@ -107,7 +120,7 @@ export function AboutPage() {
           </div>
         </section>
         {/* Capability Recap */}
-        <section>
+        <section className="mb-24">
           <div className="mb-12">
             <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-4">Core <span className="text-rysys-gold">DNA</span></h2>
             <div className="h-2 w-24 bg-rysys-black" />
@@ -131,6 +144,144 @@ export function AboutPage() {
               description="Systems Integration: CD-SEM, metrology, digital logic (TTL/CMOS)."
               tags={["CD-SEM", "Metrology", "TTL/CMOS"]}
             />
+          </div>
+        </section>
+        {/* Business Plan Section */}
+        <section id="business-plan" className="mb-24">
+          <div className="mb-12">
+            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">
+              Business <span className="text-rysys-gold">Plan</span>
+            </h2>
+            <div className="h-2 w-32 bg-rysys-gold mb-6" />
+            <p className="text-lg md:text-xl font-bold text-muted-foreground uppercase tracking-wide max-w-2xl">
+              A pragmatic path from MVP to real-world infrastructure impact.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            {/* Mission Card */}
+            <Card className="bg-white border-4 border-rysys-black rounded-none p-8 shadow-brutal hover:shadow-brutal-gold transition-all group flex flex-col h-full">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-rysys-grey border-2 border-rysys-black group-hover:bg-rysys-gold transition-colors">
+                  <Target className="w-8 h-8 group-hover:text-white transition-colors" />
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-tighter">Mission</h3>
+              </div>
+              <Accordion type="single" collapsible defaultValue="mission-1" className="w-full space-y-4">
+                <AccordionItem value="mission-1" className="border-4 border-rysys-black px-4 bg-rysys-cream/20">
+                  <AccordionTrigger className="hover:no-underline font-black uppercase text-sm tracking-widest text-left py-4">
+                    Bridge EE, AI & Physical Wealth
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-4 pt-2">
+                    <ul className="space-y-4">
+                      <li className="flex gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-rysys-gold shrink-0 mt-0.5" />
+                        <span className="text-sm font-medium leading-relaxed">Electrical engineering excellence as the immutable backbone of modern industrial power.</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-rysys-gold shrink-0 mt-0.5" />
+                        <span className="text-sm font-medium leading-relaxed">Applied AI and Computer Vision deployed at the edge to automate human-error prone inspections.</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-rysys-gold shrink-0 mt-0.5" />
+                        <span className="text-sm font-medium leading-relaxed">Strategic real-estate and infrastructure alignment to capture long-term, durable asset value.</span>
+                      </li>
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </Card>
+            {/* Roadmap Card */}
+            <Card className="bg-white border-4 border-rysys-black rounded-none p-8 shadow-brutal hover:shadow-brutal-gold transition-all group flex flex-col h-full">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-rysys-grey border-2 border-rysys-black group-hover:bg-rysys-gold transition-colors">
+                  <Route className="w-8 h-8 group-hover:text-white transition-colors" />
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-tighter">Strategic Roadmap</h3>
+              </div>
+              <Accordion type="single" collapsible className="w-full space-y-3">
+                {[
+                  { phase: "01", title: "MVP & for-US-t Live", outcome: "Establish community node and protocol baseline." },
+                  { phase: "02", title: "Federal Grants", outcome: "Pursue SBIR/DOE/NREL funding for deep-tech scaling." },
+                  { phase: "03", title: "Pilot Infrastructure", outcome: "Deploy localized microgrids and edge SoC sensors." },
+                  { phase: "04", title: "Regional Scale", outcome: "Integrate with real-estate for grid-level intelligence." }
+                ].map((item) => (
+                  <AccordionItem key={item.phase} value={item.phase} className="border-2 border-rysys-black px-4 hover:bg-rysys-grey/20 transition-colors">
+                    <AccordionTrigger className="hover:no-underline font-bold uppercase text-xs tracking-[0.2em] py-3">
+                      Phase {item.phase} // {item.title}
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-4 font-mono text-[11px] text-muted-foreground uppercase">
+                      Outcome: <span className="text-rysys-black font-black">{item.outcome}</span>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </Card>
+            {/* Services Recap Card */}
+            <Card className="bg-white border-4 border-rysys-black rounded-none p-8 shadow-brutal hover:shadow-brutal-gold transition-all group flex flex-col h-full">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-rysys-grey border-2 border-rysys-black group-hover:bg-rysys-gold transition-colors">
+                  <Wrench className="w-8 h-8 group-hover:text-white transition-colors" />
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-tighter">Services & Capabilities</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[
+                  { title: "Computer Vision & AI", tags: ["CNN QR", "Edge SoC"] },
+                  { title: "Energy Modeling", tags: ["GIS", "Geothermal"] },
+                  { title: "Infrastructure", tags: ["CD-SEM", "CMOS Logic"] },
+                  { title: "Embedded Systems", tags: ["RT-Pipelines", "SoC"] }
+                ].map((service) => (
+                  <div key={service.title} className="border-2 border-rysys-black p-4 bg-rysys-cream/30 hover:bg-white transition-colors">
+                    <h4 className="font-black uppercase text-[10px] tracking-widest mb-3 border-b border-rysys-black/10 pb-1">{service.title}</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {service.tags.map(t => (
+                        <Badge key={t} variant="outline" className="border-2 border-rysys-black bg-white rounded-none text-[8px] font-black uppercase tracking-tighter py-0 px-2 h-5">
+                          {t}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+            {/* Team Card */}
+            <Card className="bg-white border-4 border-rysys-black rounded-none p-8 shadow-brutal hover:shadow-brutal-gold transition-all group flex flex-col h-full">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="p-3 bg-rysys-grey border-2 border-rysys-black group-hover:bg-rysys-gold transition-colors">
+                  <Users className="w-8 h-8 group-hover:text-white transition-colors" />
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-tighter">Team & Founder</h3>
+              </div>
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-black uppercase tracking-tighter">Ryne Frank Shelton</span>
+                    <Award className="w-6 h-6 text-rysys-gold" />
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-rysys-gold uppercase tracking-[0.2em] font-mono">
+                    <Badge className="bg-rysys-gold text-white rounded-none hover:bg-rysys-gold px-2 py-0 border-none">GPA 4.0</Badge>
+                    <span>Lead Systems Engineer</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground border-y-2 border-rysys-black/5 py-2">
+                  <MapPin className="w-4 h-4 text-rysys-green-power" />
+                  <span>Portland, Oregon — USA</span>
+                </div>
+                <div className="grid grid-cols-2 gap-y-3">
+                  {[
+                    "Power Systems",
+                    "Embedded AI",
+                    "Grid Standards",
+                    "Open-Source Infra"
+                  ].map(skill => (
+                    <div key={skill} className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-rysys-gold rotate-45" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">{skill}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Card>
           </div>
         </section>
       </main>
