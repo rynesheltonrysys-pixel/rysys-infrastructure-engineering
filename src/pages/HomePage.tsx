@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   QrCode,
   Cpu,
@@ -14,9 +15,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 const NAVBAR_LINKS = [
-  { name: 'Capabilities', href: '#capabilities' },
-  { name: 'Leadership', href: '#leadership' },
-  { name: 'Community Portal', href: '#portal', isCta: true },
+  { name: 'Capabilities', href: '#capabilities', isAnchor: true },
+  { name: 'Leadership', href: '#leadership', isAnchor: true },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' },
+  { name: 'Community Portal', href: '#portal', isCta: true, isAnchor: true },
 ];
 const TRUST_AFFILIATIONS = ['IEEE', 'ANSI', 'OSHA', 'NEMA'];
 export function HomePage() {
@@ -24,29 +27,39 @@ export function HomePage() {
     <div className="min-h-screen bg-rysys-cream text-rysys-black selection:bg-rysys-gold selection:text-white font-sans scroll-smooth">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-white border-b-4 border-rysys-black px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto h-20 md:h-24 py-2 md:py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto h-20 md:h-24 flex items-center justify-between">
           <div className="flex items-center gap-2 group cursor-pointer">
             <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex items-center justify-center shadow-brutal-gold group-hover:translate-x-[1px] group-hover:translate-y-[1px] group-hover:shadow-brutal-gold-hover transition-all">
               <span className="text-white font-black text-xl">R</span>
             </div>
             <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
           </div>
-          <div className="hidden md:flex items-center gap-10">
+          <div className="hidden lg:flex items-center gap-8">
             {NAVBAR_LINKS.map((link) => (
               link.isCta ? (
-                <a key={link.name} href={link.href} className="inline-block mt-[2px]">
+                <a key={link.name} href={link.href} className="inline-block">
                   <Button className="bg-rysys-blue text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none font-bold uppercase py-6 px-8 h-auto">
                     {link.name}
                   </Button>
                 </a>
               ) : (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-sm font-bold uppercase tracking-widest hover:text-rysys-gold transition-colors"
-                >
-                  {link.name}
-                </a>
+                link.isAnchor ? (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="text-sm font-bold uppercase tracking-widest hover:text-rysys-gold transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.name}
+                    to={link.href}
+                    className="text-sm font-bold uppercase tracking-widest hover:text-rysys-gold transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                )
               )
             ))}
           </div>
@@ -54,7 +67,6 @@ export function HomePage() {
       </nav>
       {/* Hero Section */}
       <header className="relative overflow-hidden border-b-4 border-rysys-black">
-        {/* Portland Skyline Background Overlay */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <img
             src="https://images.unsplash.com/photo-1541457523724-95f54f7740cc?auto=format&fit=crop&q=80&w=1600"
@@ -149,8 +161,7 @@ export function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 items-center">
               <div className="lg:col-span-4">
                 <div className="aspect-[4/5] bg-rysys-grey border-4 border-rysys-black shadow-brutal relative p-6 flex items-center justify-center overflow-hidden group cursor-pointer hover:bg-white transition-colors duration-300">
-                  {/* Placeholder for future portrait upload */}
-                  <div 
+                  <div
                     className="w-full h-full border-4 border-dashed border-rysys-gold/40 group-hover:border-rysys-gold flex flex-col items-center justify-center gap-4 text-center transition-colors"
                     aria-label="Upload Leadership Portrait Placeholder"
                   >
@@ -159,7 +170,6 @@ export function HomePage() {
                       Upload Portrait
                     </span>
                   </div>
-                  {/* Note: Simply replace the inner div with an <img> or set a bg-image on the parent to swap to a real photo */}
                 </div>
               </div>
               <div className="lg:col-span-8 space-y-8">
@@ -223,10 +233,10 @@ export function HomePage() {
             <div>
               <h4 className="font-black uppercase tracking-widest mb-6 border-b-2 border-rysys-gold pb-2 inline-block">Sitemap</h4>
               <div className="space-y-4 font-bold uppercase text-sm flex flex-col text-muted-foreground">
-                <span className="hover:text-rysys-gold cursor-pointer transition-colors">Project Portfolio</span>
-                <span className="hover:text-rysys-gold cursor-pointer transition-colors">Technical Papers</span>
-                <span className="hover:text-rysys-gold cursor-pointer transition-colors">Safety Records</span>
-                <span className="hover:text-rysys-gold cursor-pointer transition-colors">Career Portal</span>
+                <Link to="/" className="hover:text-rysys-gold transition-colors">Home</Link>
+                <Link to="/about" className="hover:text-rysys-gold transition-colors">About RYSYS</Link>
+                <Link to="/contact" className="hover:text-rysys-gold transition-colors">Contact</Link>
+                <a href="#portal" className="hover:text-rysys-gold transition-colors">Community Portal</a>
               </div>
             </div>
             <div>
