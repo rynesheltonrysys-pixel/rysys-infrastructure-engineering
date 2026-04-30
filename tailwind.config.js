@@ -35,10 +35,11 @@ export default {
   			rysys: {
   				cream: '#fdfaf5',
   				grey: '#ececec',
-  				blue: '#1e40af', // Retained for compatibility
-          'green-power': '#00583F', // Portland Forest Green
+  				blue: '#1e40af',
+          'blue-power': '#418FDE',
+          'green-power': '#00583F',
   				black: '#121212',
-          gold: '#FFD100' // Portland Gold
+          gold: '#FFD100'
   			},
   			muted: {
   				DEFAULT: 'hsl(var(--muted))',
@@ -75,7 +76,9 @@ export default {
   		boxShadow: {
   			brutal: '4px 4px 0px #121212',
   			'brutal-lg': '10px 10px 0px #121212',
-  			'brutal-blue': '6px 6px 0px #1e40af',
+  			'brutal-blue': '6px 6px 0px #418FDE',
+        'brutal-blue-lg': '10px 10px 0px #418FDE',
+        'brutal-blue-hover': '2px 2px 0px #418FDE',
         'brutal-green': '6px 6px 0px #00583F',
         'brutal-green-lg': '10px 10px 0px #00583F',
         'brutal-gold': '4px 4px 0px #FFD100',

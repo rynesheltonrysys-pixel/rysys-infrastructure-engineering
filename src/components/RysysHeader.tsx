@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 interface RysysHeaderProps {
-  isHome?: boolean; // Kept for signature compatibility
+  isHome?: boolean;
   current?: 'home' | 'about' | 'contact' | 'forust';
 }
 const NAV_LINKS = [
@@ -19,8 +19,8 @@ export function RysysHeader({ current }: RysysHeaderProps) {
       {NAV_LINKS.map((link) => {
         const isActive = current === link.key;
         const linkClass = cn(
-          "text-sm font-bold uppercase tracking-widest transition-colors hover:text-rysys-gold whitespace-nowrap",
-          isActive && "text-rysys-gold underline underline-offset-8 decoration-4",
+          "text-sm font-bold uppercase tracking-widest transition-all hover:text-rysys-blue-power whitespace-nowrap",
+          isActive && "text-rysys-gold underline underline-offset-8 decoration-4 decoration-rysys-blue-power",
           mobile && "text-lg py-4 border-b-2 border-rysys-black/5 w-full text-left"
         );
         return (
@@ -49,7 +49,6 @@ export function RysysHeader({ current }: RysysHeaderProps) {
   return (
     <nav className="sticky top-0 z-50 bg-white border-b-4 border-rysys-black px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto h-20 md:h-24 flex items-center justify-between">
-        {/* Brand */}
         <Link to="/" className="flex items-center gap-3 group cursor-pointer" onClick={() => setOpen(false)}>
           <div className="w-10 h-10 bg-rysys-gold border-3 border-rysys-black flex flex-col items-center justify-center shadow-brutal-gold group-hover:translate-x-[1px] group-hover:translate-y-[1px] group-hover:shadow-brutal-gold-hover transition-all leading-none overflow-hidden">
             <span className="text-white font-black text-[10px] select-none">RY</span>
@@ -57,11 +56,9 @@ export function RysysHeader({ current }: RysysHeaderProps) {
           </div>
           <span className="text-2xl font-black tracking-tighter uppercase">RYSYS</span>
         </Link>
-        {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-8">
           <NavItems />
         </div>
-        {/* Mobile Nav Trigger */}
         <div className="lg:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
