@@ -9,7 +9,13 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@radix-ui/react-dialog';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger 
+} from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import type { Doc, Message, Comment } from '@shared/types';
 export function ForustPage() {
@@ -53,7 +59,7 @@ export function ForustPage() {
             <span className="text-white font-black text-[10px] select-none">RY</span>
             <span className="text-white font-black text-[10px] select-none">SYS</span>
           </div>
-          <span className="font-black text-xl uppercase tracking-[0.1em]">forUSt Portal</span>
+          <span className="font-black text-xl uppercase tracking-[0.1em]">for-US-t Portal</span>
         </Link>
         <div className="flex items-center gap-4">
           <Badge className="hidden sm:inline-flex bg-rysys-green-power text-white border-2 border-rysys-black rounded-none px-3 font-mono text-[10px]">
@@ -123,7 +129,7 @@ function DocCard({ initialDoc }: { initialDoc: Doc }) {
           <p className="text-[10px] font-bold text-muted-foreground uppercase">Updated {new Date(initialDoc.updatedAt).toLocaleDateString()}</p>
         </Card>
       </DialogTrigger>
-      <DialogContent className="fixed left-[50%] top-[50%] z-50 w-full max-w-5xl translate-x-[-50%] translate-y-[-50%] border-4 border-rysys-black rounded-none bg-rysys-cream p-0 shadow-brutal-lg overflow-hidden outline-none">
+      <DialogContent className="max-w-5xl rounded-none border-4 border-rysys-black bg-rysys-cream p-0 shadow-brutal-lg overflow-hidden outline-none">
         <DocViewer doc={initialDoc} />
       </DialogContent>
     </Dialog>
@@ -230,28 +236,26 @@ function DocViewer({ doc: initialDoc }: { doc: Doc }) {
         </div>
       </div>
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-        {/* Content Viewer */}
         <div className="flex-1 overflow-y-auto p-8 font-mono text-sm leading-relaxed bg-white/40 border-b-4 lg:border-b-0 lg:border-r-4 border-rysys-black">
           <div className="mb-6 pb-2 border-b-2 border-rysys-black/5 flex justify-between items-center">
             <span className="text-[10px] font-black uppercase tracking-widest">Protocol Buffer</span>
             <span className="text-[10px] font-mono opacity-50">STAMP: {new Date(currentVersion.createdAt).toLocaleString()}</span>
           </div>
           <pre className="whitespace-pre-wrap">{currentVersion.content}</pre>
-          {/* New Version Commit Box */}
           <div className="mt-12 pt-8 border-t-4 border-rysys-black">
             <h4 className="text-sm font-black uppercase tracking-widest mb-4 flex items-center gap-2">
               <Plus className="w-4 h-4" /> Commit Iteration
             </h4>
             <div className="bg-white border-3 border-rysys-black p-4 shadow-brutal-hover">
-              <Textarea 
+              <Textarea
                 value={newVersionContent}
                 onChange={e => setNewVersionContent(e.target.value)}
                 placeholder="INPUT UPDATED SPECIFICATIONS..."
                 className="min-h-[120px] border-none bg-transparent font-mono focus-visible:ring-0 resize-none p-0"
               />
               <div className="mt-4 flex justify-end">
-                <Button 
-                  onClick={handleCommitVersion} 
+                <Button
+                  onClick={handleCommitVersion}
                   disabled={!newVersionContent.trim() || isCommitting}
                   className="bg-rysys-black text-white rounded-none font-black uppercase h-10 px-6 shadow-brutal hover:shadow-brutal-gold transition-all"
                 >
@@ -262,7 +266,6 @@ function DocViewer({ doc: initialDoc }: { doc: Doc }) {
             </div>
           </div>
         </div>
-        {/* Intelligence / Comments Sidebar */}
         <div className="w-full lg:w-[400px] flex flex-col bg-white overflow-hidden">
           <div className="p-4 border-b-2 border-rysys-black bg-rysys-grey/30 flex items-center gap-2">
             <MessageSquare className="w-4 h-4" />
@@ -291,13 +294,13 @@ function DocViewer({ doc: initialDoc }: { doc: Doc }) {
             )}
           </div>
           <div className="p-4 border-t-4 border-rysys-black bg-rysys-cream">
-            <Textarea 
+            <Textarea
               value={newComment}
               onChange={e => setNewComment(e.target.value)}
               placeholder="LOG COMMENTARY..."
               className="border-2 border-rysys-black bg-white rounded-none text-xs font-bold min-h-[80px] focus-visible:ring-rysys-gold"
             />
-            <Button 
+            <Button
               onClick={handlePostComment}
               disabled={newComment.length < 2 || isPostingComment}
               className="w-full mt-2 bg-rysys-black text-white rounded-none font-black uppercase text-[10px] h-10 shadow-brutal hover:shadow-brutal-gold transition-all"
@@ -341,7 +344,7 @@ function NewDocDialog({ onCreated }: { onCreated: () => void }) {
           <Plus className="w-4 h-4 mr-2" /> New Proposal
         </Button>
       </DialogTrigger>
-      <DialogContent className="fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] border-4 border-rysys-black rounded-none bg-white p-8 shadow-brutal-lg outline-none">
+      <DialogContent className="max-w-lg rounded-none border-4 border-rysys-black bg-white p-8 shadow-brutal-lg outline-none">
         <DialogHeader>
           <DialogTitle className="text-3xl font-black uppercase tracking-tighter">Create Technical Proposal</DialogTitle>
         </DialogHeader>

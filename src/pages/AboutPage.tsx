@@ -5,7 +5,8 @@ import {
   CheckCircle2,
   QrCode,
   Code2,
-  Globe
+  Globe,
+  Trees
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -14,7 +15,7 @@ const NAV_LINKS = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about', active: true },
   { name: 'Contact', href: '/contact' },
-  { name: 'forUSt', href: '/forust', isCta: true },
+  { name: 'for-US-t', href: '/forust', isCta: true },
 ];
 export function AboutPage() {
   return (
@@ -33,8 +34,10 @@ export function AboutPage() {
             {NAV_LINKS.map((link) => (
               link.isCta ? (
                 <Link key={link.name} to={link.href} className="inline-block">
-                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-6 px-8 h-auto">
+                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-6 px-8 h-auto flex items-center gap-2">
+                    <Trees className="w-5 h-5 text-rysys-gold" />
                     <span className="font-black uppercase tracking-[0.1em]">{link.name}</span>
+                    <Trees className="w-5 h-5 text-rysys-gold" />
                   </Button>
                 </Link>
               ) : (

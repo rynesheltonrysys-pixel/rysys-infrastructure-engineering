@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Send, Cpu, Briefcase } from 'lucide-react';
+import { Mail, MapPin, Send, Cpu, Briefcase, Trees } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact', active: true },
-  { name: 'forUSt', href: '/forust', isCta: true },
+  { name: 'for-US-t', href: '/forust', isCta: true },
 ];
 const contactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -51,8 +51,10 @@ export function ContactPage() {
             {NAV_LINKS.map((link) => (
               link.isCta ? (
                 <Link key={link.name} to={link.href} className="inline-block">
-                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-6 px-8 h-auto">
+                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-6 px-8 h-auto flex items-center gap-2">
+                    <Trees className="w-5 h-5 text-rysys-gold" />
                     <span className="font-black uppercase tracking-[0.1em]">{link.name}</span>
+                    <Trees className="w-5 h-5 text-rysys-gold" />
                   </Button>
                 </Link>
               ) : (

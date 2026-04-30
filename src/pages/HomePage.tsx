@@ -8,7 +8,8 @@ import {
   Terminal,
   Mail,
   MapPin,
-  UploadCloud
+  UploadCloud,
+  Trees
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -18,7 +19,7 @@ const NAVBAR_LINKS = [
   { name: 'Leadership', href: '#leadership', isAnchor: true },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
-  { name: 'forUSt', href: '/forust', isCta: true },
+  { name: 'for-US-t', href: '/forust', isCta: true },
 ];
 const TRUST_AFFILIATIONS = ['PSU', 'IEEE', 'NCEES', 'Grants.gov'];
 export function HomePage() {
@@ -38,8 +39,10 @@ export function HomePage() {
             {NAVBAR_LINKS.map((link) => (
               link.isCta ? (
                 <Link key={link.name} to={link.href} className="inline-block">
-                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-6 px-8 h-auto">
+                  <Button className="bg-rysys-green-power text-white border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-6 px-8 h-auto flex items-center gap-2">
+                    <Trees className="w-5 h-5 text-rysys-gold" />
                     <span className="font-black uppercase tracking-[0.1em]">{link.name}</span>
+                    <Trees className="w-5 h-5 text-rysys-gold" />
                   </Button>
                 </Link>
               ) : (
@@ -118,8 +121,8 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap justify-center md:justify-between items-center gap-16">
             {TRUST_AFFILIATIONS.map((name) => (
-              <span 
-                key={name} 
+              <span
+                key={name}
                 className="text-white text-3xl md:text-5xl font-black tracking-widest uppercase opacity-80 hover:text-rysys-gold hover:opacity-100 transition-all cursor-default"
               >
                 {name}
@@ -200,22 +203,24 @@ export function HomePage() {
           </div>
         </div>
       </section>
-      {/* forUSt Section */}
+      {/* for-US-t Section */}
       <section id="portal" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-28">
         <div className="bg-rysys-green-power border-4 border-rysys-black p-12 md:p-20 text-center shadow-brutal-gold-lg relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rotate-45 translate-x-16 -translate-y-16" />
-          <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-[0.1em] mb-8">
-            Join <br /> forUSt
+          <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-[0.1em] mb-8 flex items-center justify-center gap-4">
+            <Trees className="w-8 h-8 md:w-12 md:h-12 text-rysys-gold" />
+            <span>Join <br className="md:hidden" /> for-US-t</span>
+            <Trees className="w-8 h-8 md:w-12 md:h-12 text-rysys-gold" />
           </h2>
           <p className="text-white/80 text-xl md:text-2xl font-bold mb-12 max-w-2xl mx-auto leading-relaxed">
             Access our open-source infrastructure tools, engineering standards, and technical whitepapers.
           </p>
           <div className="flex justify-center mt-4">
             <Link to="/forust">
-              <Button className="bg-white text-rysys-black border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:text-rysys-gold hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-8 px-12 text-xl h-auto group">
-                <span className="font-black uppercase tracking-[0.1em] flex items-center">
-                  Enter Portal <Terminal className="ml-3 group-hover:text-rysys-gold transition-colors" />
-                </span>
+              <Button className="bg-white text-rysys-black border-3 border-rysys-black shadow-brutal-gold hover:shadow-brutal-gold-hover hover:text-rysys-gold hover:translate-x-[2px] hover:translate-y-[2px] transition-all rounded-none py-8 px-12 text-xl h-auto group flex items-center gap-3">
+                <Trees className="w-6 h-6 text-rysys-green-power" />
+                <span className="font-black uppercase tracking-[0.1em]">Enter Portal</span>
+                <Trees className="w-6 h-6 text-rysys-green-power" />
               </Button>
             </Link>
           </div>
@@ -243,8 +248,10 @@ export function HomePage() {
                 <Link to="/" className="hover:text-rysys-gold transition-colors">Home</Link>
                 <Link to="/about" className="hover:text-rysys-gold transition-colors">About RYSYS</Link>
                 <Link to="/contact" className="hover:text-rysys-gold transition-colors">Contact</Link>
-                <Link to="/forust" className="hover:text-rysys-gold transition-colors">
-                  <span className="font-black uppercase tracking-[0.1em]">forUSt</span>
+                <Link to="/forust" className="hover:text-rysys-gold transition-colors flex items-center gap-1">
+                  <Trees className="w-3 h-3 text-rysys-green-power" />
+                  <span className="font-black uppercase tracking-[0.1em]">for-US-t</span>
+                  <Trees className="w-3 h-3 text-rysys-gold" />
                 </Link>
               </div>
             </div>
