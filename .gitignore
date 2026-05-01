@@ -2,3 +2,8 @@
 # Bootstrap marker
 .bootstrap-complete
 node_modules
+
+# Environment variables
+.env
+.env.local
+.env.*.local

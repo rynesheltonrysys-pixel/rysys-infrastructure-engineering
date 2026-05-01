@@ -67,26 +67,55 @@ Customize the homepage in `src/pages/HomePage.tsx` and replace demo sidebar in `
 
 ## Deployment
 
-1. **Build the App**:
+### Authentication Setup (One-time)
+
+1. **Create Cloudflare API Token**:
+   - Go to [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens)
+   - Click **"Create Token"**
+   - Select template: **"Workers"** (provides Worker Scripts Write + Routes Write)
+   - Copy the token (you won't be able to see it again)
+
+2. **Set the token in your environment**:
+
+   **Option A: `.env` file (local development)**:
    ```bash
-   npm run build
+   cp .env.example .env
+   # Edit .env and paste your token
+   CLOUDFLARE_API_TOKEN=your_token_here
    ```
 
-2. **Deploy to Cloudflare**:
+   **Option B: Environment variable (CI/CD or headless)**:
    ```bash
-   npm run deploy
+   export CLOUDFLARE_API_TOKEN="your_token_here"
    ```
-   Deploys Worker + static assets. Configured via `wrangler.jsonc`.
 
-3. **One-Click Deploy**:
-   [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/rynesheltonrysys-pixel/rysys-infrastructure-engineering)
+   **Option C: GitHub Actions**:
+   Add as a secret: `Settings → Secrets and variables → Actions → New repository secret`
+   Name: `CLOUDFLARE_API_TOKEN`
+
+### Deploying
+
+**Build and deploy**:
+```bash
+npm run deploy
+```
+
+**Validate without deploying (dry-run)**:
+```bash
+npm run deploy:dry-run
+```
+
+The deployment process:
+1. Builds the React frontend + Cloudflare Workers backend
+2. Uploads to Cloudflare Workers
+3. Configures static assets and Durable Objects
 
 **Notes**:
 - Assets served via Cloudflare (SPA routing).
 - Durable Objects auto-migrate (`v1` tag in `wrangler.jsonc`).
 - Update `wrangler.jsonc` for custom domains, env vars, or bindings.
-- Preview: `wrangler deploy --dry-run`.
 - Observability enabled by default.
+
 
 ## Project Structure
 
