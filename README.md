@@ -21,28 +21,28 @@ A production-ready full-stack starter template for building modern web applicati
 - **State/Data**: TanStack React Query 5, React Router 6, Zod validation.
 - **Backend**: Cloudflare Workers, Hono 4, Durable Objects (SQLite).
 - **Utilities**: clsx, tailwind-merge, date-fns, Recharts, React Hook Form.
-- **Dev Tools**: Bun, ESLint, Wrangler, Cloudflare Vite plugin.
+- **Dev Tools**: Node/npm, ESLint, Wrangler, Cloudflare Vite plugin.
 
 ## Quick Start
 
 1. **Prerequisites**:
-   - [Bun](https://bun.sh/) installed.
-   - [Cloudflare Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/) installed (`npm i -g wrangler`).
+   - Node.js and npm installed.
+   - [Cloudflare Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/) installed (`npm i -g wrangler` or `npm exec -- wrangler`).
    - Cloudflare account and Wrangler login (`wrangler login`).
 
 2. **Install Dependencies**:
    ```bash
-   bun install
+   npm install
    ```
 
 3. **Generate Worker Types**:
    ```bash
-   bun run cf-typegen
+   npm run cf-typegen
    ```
 
 4. **Run Development Server**:
    ```bash
-   bun dev
+   npm run dev
    ```
    Opens at `http://localhost:3000` (or `$PORT`).
 
@@ -53,8 +53,8 @@ A production-ready full-stack starter template for building modern web applicati
 - **API Testing**: `/api/health`, `/api/counter`, `/api/demo` endpoints available.
 - **Type Safety**: Shared types in `shared/`. Update `tsconfig` paths as needed.
 - **Theme**: Toggle dark/light mode via `ThemeToggle`.
-- **Linting**: `bun lint`.
-- **Build**: `bun build` (generates `dist/` for deployment).
+- **Linting**: `npm run lint`.
+- **Build**: `npm run build` (generates `dist/` for deployment).
 
 Example API calls (from browser dev tools):
 ```bash
@@ -69,12 +69,12 @@ Customize the homepage in `src/pages/HomePage.tsx` and replace demo sidebar in `
 
 1. **Build the App**:
    ```bash
-   bun run build
+   npm run build
    ```
 
 2. **Deploy to Cloudflare**:
    ```bash
-   bun run deploy
+   npm run deploy
    ```
    Deploys Worker + static assets. Configured via `wrangler.jsonc`.
 
