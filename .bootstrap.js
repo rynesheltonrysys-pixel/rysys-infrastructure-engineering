@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 /**
  * Auto-generated bootstrap script
  * Runs once after git clone to setup project correctly
