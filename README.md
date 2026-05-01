@@ -101,8 +101,8 @@ Customize the homepage in `src/pages/HomePage.tsx` and replace demo sidebar in `
 ## Contributing
 
 1. Fork and clone.
-2. `bun install`.
-3. Make changes, test with `bun dev`.
+2. `npm install`.
+3. Make changes, test with `npm run dev`.
 4. Submit PR.
 
 ## License
